@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: project-utils.jar
+Specification-Vendor: "Radek Beran"
+Specification-Title: "Forms demo" 
+Specification-Version: "1.0"
+

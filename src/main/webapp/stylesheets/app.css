@@ -1,0 +1,43 @@
+/** Custom CSS here */
+
+body {
+	margin-bottom:1.5em
+}
+
+.control-label, .control-label label {
+	font-weight: normal;
+}
+
+dd label {
+	font-weight: normal;
+}
+
+.form-group {
+	margin: 0.5em;
+	padding: 0;
+}
+.compact {
+	margin: 0;
+	padding: 0;
+}
+.form-group dl {
+	margin: 0;
+	padding: 0;
+}
+
+.error {
+	color: red;
+}
+
+.warning {
+	color: orange;
+}
+
+.nav-tabs {
+	margin-bottom:1.5em
+}
+
+.remove-button {
+	vertical-align: bottom;
+	padding-top: 0.5em;
+}

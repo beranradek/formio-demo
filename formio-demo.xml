@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE Context [
+<!ENTITY project.home "C:/Radek/projekty/java/sources/formio-demo">
+]>
+
+<Context path="/" debug="1" docBase="&project.home;/src/main/webapp" reloadable="true">
+
+	<!-- DO NOT USE THIS IN PRODUCTION ENVIRONMENT -->
+	<Loader className="org.apache.catalina.loader.DevLoader" useSystemClassLoaderAsParent="false" reloadable="true" debug="1"/> 
+</Context>
