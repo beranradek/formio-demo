@@ -9,6 +9,9 @@ applicationName = "formio-demo"
 version = '1.0'
 group = 'com.examples.forms'
 
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
 // Bez takto urceneho repositare resolvovani interni ivy knihovnou gradlu nefunguje: 
 repositories {
     mavenCentral()
