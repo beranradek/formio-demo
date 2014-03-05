@@ -1,7 +1,8 @@
 <%@page pageEncoding="UTF-8" %>
 <%@include file="include.jsp" %>
 <jsp:include page="header.jsp" />
-<fmt:bundle basename="com.examples.forms.domain.Registration">
+<c:set var="bundleName" value="com.examples.forms.domain.Registration" />
+<fmt:bundle basename="${bundleName}">
 <h1>Formio demo</h1>
 <ul class="nav nav-tabs">
   <li><a href="index.html">Simple</a></li>
@@ -16,10 +17,10 @@
 
 <form action="<c:url value="/advanced.html"/>" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
 
-<form:input type="file" fieldName="cv" fields="${form.fields}" fieldMsgs="${fieldMsgs}" postfix="${form.fields['cv'].filledObject.fileName}" />
+<form:input type="file" fieldName="cv" fields="${form.fields}" fieldMsgs="${fieldMsgs}" postfix="${form.fields['cv'].filledObject.fileName}" bundleName="${bundleName}" />
 
 <c:set var="certificatesMapping" value="${form.nested['certificates']}"/>
-<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${certificatesMapping}" />
+<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${certificatesMapping}" bundleName="${bundleName}" />
 <c:choose>
 <c:when test="${empty certificatesMapping.filledObject}">
 	<div class="form-group">
@@ -43,35 +44,35 @@
 				</dd>
 			</dl>
 		</div>
-		<form:input type="file" fieldName="file" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" postfix="${mapping.filledObject.file.fileName}" withoutLabel="true" />
+		<form:input type="file" fieldName="file" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" postfix="${mapping.filledObject.file.fileName}" withoutLabel="true" bundleName="${bundleName}" />
 	</c:forEach>
 </c:otherwise>
 </c:choose>
 
-<form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['interests']}"/>
+<form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['interests']}" bundleName="${bundleName}"/>
 <c:forEach var="interest" items="${interests}">
-	<form:check type="checkbox" fieldName="interests" fields="${form.fields}" itemId="${interest.interestId}" itemLabel="${interest.name}"/>
+	<form:check type="checkbox" fieldName="interests" fields="${form.fields}" itemId="${interest.interestId}" itemLabel="${interest.name}" bundleName="${bundleName}"/>
 </c:forEach>
 
-<form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['attendanceReasons']}"/>
+<form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['attendanceReasons']}" bundleName="${bundleName}"/>
 <c:forEach var="attendanceReason" items="${attendanceReasons}">
-	<form:check type="checkbox" fieldName="attendanceReasons" fields="${form.fields}" itemId="${attendanceReason}" itemLabel="${attendanceReason}" localize="true"/>
+	<form:check type="checkbox" fieldName="attendanceReasons" fields="${form.fields}" itemId="${attendanceReason}" itemLabel="${attendanceReason}" localize="true" bundleName="${bundleName}"/>
 </c:forEach>
 
-<form:input type="text" fieldName="email" fields="${form.fields}" fieldMsgs="${fieldMsgs}" />
+<form:input type="text" fieldName="email" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 
 <form:messages fieldMsgs="${fieldMsgs}" fieldName="registration-contactAddress" />
 <c:set var="contactAddressMapping" value="${form.nested['contactAddress']}"/>
 <c:if test="${not empty contactAddressMapping.filledObject}">
-	<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${contactAddressMapping}" />
+	<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${contactAddressMapping}" bundleName="${bundleName}" />
 	<c:set var="contactAddrFields" value="${contactAddressMapping.fields}" />
-	<form:input type="text" fieldName="street" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" />
-	<form:input type="text" fieldName="city" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" />
-	<form:input type="text" fieldName="zipCode" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" />
+	<form:input type="text" fieldName="street" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="city" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="zipCode" fields="${contactAddrFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 </c:if>
 
 <c:set var="colleguesMapping" value="${form.nested['collegues']}"/>
-<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${colleguesMapping}" showLength="true" />
+<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${colleguesMapping}" showLength="true" bundleName="${bundleName}" />
 <c:choose>
 <c:when test="${empty colleguesMapping.filledObject}">
 	<div class="form-group">
@@ -93,24 +94,24 @@
 				</dd>
 			</dl>
 		</div>
-		<form:input type="text" fieldName="name" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" />
-		<form:input type="text" fieldName="email" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" />
+		<form:input type="text" fieldName="name" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+		<form:input type="text" fieldName="email" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 		<c:set var="regDateFields" value="${mapping.nested['regDate'].fields}" />
-		<form:input type="text" fieldName="month" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" />
-		<form:input type="text" fieldName="year" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" />
+		<form:input type="text" fieldName="month" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+		<form:input type="text" fieldName="year" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	</c:forEach>
 </c:otherwise>
 </c:choose>
 
 <hr/>
 <c:set var="newCollegueMapping" value="${form.nested['newCollegue']}"/>
-<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${newCollegueMapping}" />
+<form:mappingLabel fieldMsgs="${fieldMsgs}" mapping="${newCollegueMapping}" bundleName="${bundleName}" />
 <c:set var="newCollegueFields" value="${newCollegueMapping.fields}" />
-<form:input type="text" fieldName="name" fields="${newCollegueFields}" fieldMsgs="${fieldMsgs}" />
-<form:input type="text" fieldName="email" fields="${newCollegueFields}" fieldMsgs="${fieldMsgs}" />
+<form:input type="text" fieldName="name" fields="${newCollegueFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+<form:input type="text" fieldName="email" fields="${newCollegueFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 <c:set var="regDateFields" value="${newCollegueMapping.nested['regDate'].fields}" />
-<form:input type="text" fieldName="month" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" />
-<form:input type="text" fieldName="year" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" />
+<form:input type="text" fieldName="month" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
+<form:input type="text" fieldName="year" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 <form:button name="newCollegue" label="Add collegue" cssClass="btn btn-info"/>
 <hr/>	
 <form:button name="submitted" label="Confirm registration" cssClass="btn btn-default btn-primary"/>

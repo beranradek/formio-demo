@@ -4,12 +4,14 @@
 <%@attribute name="fieldMsgs" required="true" rtexprvalue="true" type="java.util.Map" %>
 <%@attribute name="fieldName" required="true" rtexprvalue="true" type="String" %>
 <%@attribute name="type" required="true" rtexprvalue="true" %>
+<%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
 <%@attribute name="items" required="false" rtexprvalue="true" type="java.util.Map" %>
 <%@attribute name="multi" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="withoutLabel" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="inputCss" required="false" rtexprvalue="true" type="String" %>
 <%@attribute name="postfix" required="false" rtexprvalue="true" type="java.lang.Object" %>
 
+<fmt:bundle basename="${bundleName}">
 <c:set var="field" value="${fields[fieldName]}" />
 <c:choose>
 	<c:when test="${type == 'checkbox' || type == 'radio'}">
@@ -78,3 +80,4 @@
 		</div>
 	</c:otherwise>
 </c:choose>
+</fmt:bundle>

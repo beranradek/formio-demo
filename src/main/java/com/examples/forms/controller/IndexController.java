@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.twinstone.formio.FormData;
 import org.twinstone.formio.FormMapping;
 import org.twinstone.formio.Forms;
@@ -23,6 +25,7 @@ import com.examples.forms.domain.Person;
  */
 public class IndexController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 	
 	private static final String ATT_PERSON = "person";
 	private static final String SUCCESS = "success";

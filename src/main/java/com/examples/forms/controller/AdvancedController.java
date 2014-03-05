@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.twinstone.formio.FormData;
 import org.twinstone.formio.FormMapping;
 import org.twinstone.formio.Forms;
@@ -33,7 +34,7 @@ import com.examples.forms.domain.Registration;
  */
 public class AdvancedController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(AdvancedController.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(AdvancedController.class);
 	
 	private static final String ATT_REGISTRATION = "registration";
 	private static final String ATT_REGISTRATION_CERTIFICATES = "registrationCertificates";
@@ -81,7 +82,7 @@ public class AdvancedController extends HttpServlet {
 			processRemoveCertificate(request, response, reqParams);
 		} else {
 			// no submission, loading currently stored data to show it in the form
-			// LOG.info(registrationForm + "\n");
+			// log.info(registrationForm + "\n");
 			Registration reg = findRegistration(request);
 			FormData<Registration> formData = new FormData<Registration>(reg, null);
 			renderForm(request, response, formData);
@@ -146,7 +147,7 @@ public class AdvancedController extends HttpServlet {
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
 		FormMapping<Registration> filledForm = registrationForm.fill(formData);
-		// LOG.info(filledForm + "\n");
+		// log.info(filledForm + "\n");
 		
 		// Passing form to the template
 		request.setAttribute("form", filledForm);
@@ -241,7 +242,7 @@ public class AdvancedController extends HttpServlet {
 				try {
 			    	// fos = new FileOutputStream("C:\\someDir\\" + file.getFileName());
 			    	// fos.getChannel().transferFrom(ich, 0, Long.MAX_VALUE);
-					LOG.info("File " + file.getFileName() + " was successfully processed.");
+					log.info("File " + file.getFileName() + " was successfully processed.");
 			    } finally {
 			    	if (fos != null) fos.close();
 			    	if (ich != null) ich.close();

@@ -5,10 +5,12 @@
 <%@attribute name="fields" required="true" rtexprvalue="true" type="java.util.Map" %>
 <%@attribute name="fieldName" required="true" rtexprvalue="true" type="String" %>
 <%@attribute name="type" required="true" rtexprvalue="true" %>
+<%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
 <%@attribute name="itemId" required="true" rtexprvalue="true" type="java.lang.Object" %>
 <%@attribute name="itemLabel" required="true" rtexprvalue="true" type="java.lang.Object" %>
 <%@attribute name="localize" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 
+<fmt:bundle basename="${bundleName}">
 <c:set var="field" value="${fields[fieldName]}" />
 <div class="form-group compact">
 	<dl>
@@ -24,3 +26,4 @@
 		</dd>
 	</dl>
 </div>
+</fmt:bundle>
