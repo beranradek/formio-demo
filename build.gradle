@@ -19,12 +19,13 @@ repositories {
 
 dependencies {
 	def slf4jVersion = '1.7.5';
-    def jettyVersion = '9.0.2.v20130417';
+    // def jettyVersion = '9.0.2.v20130417'; // for Java 7
+    def jettyVersion = '8.1.14.v20131031';
 
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "org.eclipse.jetty:jetty-server:${jettyVersion}"
-    compile "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-    compile "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    compile "org.eclipse.jetty.aggregate:jetty-server:${jettyVersion}"
+    compile "org.eclipse.jetty.aggregate:jetty-webapp:${jettyVersion}"
+    compile "org.eclipse.jetty.aggregate:jetty-servlet:${jettyVersion}"
     compile "org.mortbay.jetty:jsp-2.1-glassfish:2.1.v20100127"
     compile "org.mortbay.jetty:servlet-api:3.0.20100224"
     
