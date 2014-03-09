@@ -26,11 +26,11 @@ dd label {
 }
 
 .error {
-	color: red;
+	color: #a94442;
 }
 
 .warning {
-	color: orange;
+	color: #d79f3b;
 }
 
 .nav-tabs {

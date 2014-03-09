@@ -24,25 +24,20 @@
 <c:choose>
 <c:when test="${empty certificatesMapping.filledObject}">
 	<div class="form-group">
-		<dl>
-			<dt class="control-label col-sm-2"></dt>
-			<dd class="col-sm-4">
-				Please state your certificates.
-			</dd>
-		</dl>
+		<div class="control-label col-sm-2"></div>
+		<div class="col-sm-4">
+			Please state your certificates.
+		</div>
 	</div>
 </c:when>
 <c:otherwise>
 	<c:forEach var="mapping" items="${certificatesMapping.list}" varStatus="status">
 		<div class="form-group">
-			<dl>
-				<dt class="control-label col-sm-2"><fmt:message key="registration-certificate"/>:</dt>
-				<dd class="col-sm-4 remove-button">
-					<c:if test="${not empty mapping.filledObject.file.fileName}">
-						<a href="<c:url value="/advanced.html?removeCertificate=${status.index}"/>"><span class="glyphicon glyphicon-remove" title="Remove"></span></a>
-					</c:if>
-				</dd>
-			</dl>
+			<div class="col-sm-offset-2 col-sm-4 remove-button">
+				<c:if test="${not empty mapping.filledObject.file.fileName}">
+					<a href="<c:url value="/advanced.html?removeCertificate=${status.index}"/>"><span class="glyphicon glyphicon-remove" title="Remove"></span></a>
+				</c:if>
+			</div>
 		</div>
 		<form:input type="file" fieldName="file" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" postfix="${mapping.filledObject.file.fileName}" withoutLabel="true" bundleName="${bundleName}" />
 	</c:forEach>
@@ -51,12 +46,12 @@
 
 <form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['interests']}" bundleName="${bundleName}"/>
 <c:forEach var="interest" items="${interests}">
-	<form:check type="checkbox" fieldName="interests" fields="${form.fields}" itemId="${interest.interestId}" itemLabel="${interest.name}" bundleName="${bundleName}"/>
+	<form:input type="checkbox" fieldName="interests" fields="${form.fields}" fieldMsgs="${fieldMsgs}" itemId="${interest.interestId}" itemLabel="${interest.name}" bundleName="${bundleName}"/>
 </c:forEach>
 
 <form:fieldGroupLabel fieldMsgs="${fieldMsgs}" formField="${form.fields['attendanceReasons']}" bundleName="${bundleName}"/>
 <c:forEach var="attendanceReason" items="${attendanceReasons}">
-	<form:check type="checkbox" fieldName="attendanceReasons" fields="${form.fields}" itemId="${attendanceReason}" itemLabel="${attendanceReason}" localize="true" bundleName="${bundleName}"/>
+	<form:input type="checkbox" fieldName="attendanceReasons" fields="${form.fields}" fieldMsgs="${fieldMsgs}" itemId="${attendanceReason}" itemLabel="${attendanceReason}" localize="true" bundleName="${bundleName}"/>
 </c:forEach>
 
 <form:input type="text" fieldName="email" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
@@ -76,23 +71,19 @@
 <c:choose>
 <c:when test="${empty colleguesMapping.filledObject}">
 	<div class="form-group">
-		<dl>
-			<dt class="control-label col-sm-2"></dt>
-			<dd class="col-sm-4">
-				Please state your collegues.
-			</dd>
-		</dl>
+		<div class="control-label col-sm-2"></div>
+		<div class="col-sm-4">
+			Please state your collegues.
+		</div>
 	</div>
 </c:when>
 <c:otherwise>
 	<c:forEach var="mapping" items="${colleguesMapping.list}" varStatus="status">
 		<div class="form-group">
-			<dl>
-				<dt class="control-label col-sm-2"><fmt:message key="registration-collegue"/>:</dt>
-				<dd class="col-sm-4 remove-button">
-					<a href="<c:url value="/advanced.html?removeCollegue=${status.index}"/>"><span class="glyphicon glyphicon-remove" title="Remove"></span></a>
-				</dd>
-			</dl>
+			<div class="control-label col-sm-2"><fmt:message key="registration-collegue"/>:</div>
+			<div class="col-sm-4 remove-button">
+				<a href="<c:url value="/advanced.html?removeCollegue=${status.index}"/>"><span class="glyphicon glyphicon-remove" title="Remove"></span></a>
+			</div>
 		</div>
 		<form:input type="text" fieldName="name" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 		<form:input type="text" fieldName="email" fields="${mapping.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
