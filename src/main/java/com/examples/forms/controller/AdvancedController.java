@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.twinstone.formio.FormData;
 import org.twinstone.formio.FormMapping;
 import org.twinstone.formio.Forms;
+import org.twinstone.formio.MappingType;
 import org.twinstone.formio.ParamsProvider;
 import org.twinstone.formio.servlet.HttpServletRequestParams;
 import org.twinstone.formio.upload.UploadedFile;
@@ -27,6 +28,7 @@ import com.examples.forms.domain.Address;
 import com.examples.forms.domain.AttendanceReason;
 import com.examples.forms.domain.Collegue;
 import com.examples.forms.domain.NewCollegue;
+import com.examples.forms.domain.RegDate;
 import com.examples.forms.domain.Registration;
 
 /**
@@ -48,15 +50,15 @@ public class AdvancedController extends HttpServlet {
 			.nested(Forms.automatic(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance")).build())
 			.build();
 			
-//  private static final FormMapping<RegDate> regDateMapping = Forms.basic(RegDate.class, "regDate").fields("month", "year").build();
+//	private static final FormMapping<RegDate> regDateMapping = Forms.basic(RegDate.class, "regDate").fields("month", "year").build();
 //	private static final FormMapping<Registration> registrationForm =
 //		Forms.basic(Registration.class, "registration")
 //		  // whitelist of properties to bind
 //		  .fields("attendanceReasons", "cv", "interests", "email")
 //		  .nested(Forms.automatic(UploadedFileWrapper.class, "certificates", null, MappingType.LIST).build())
-//		  .nested(Forms.basic(Address.class, "contactAddress", Forms.factoryMethod(Address.class, Address.class, "getInstance"))
+//		  .nested(Forms.basic(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance"))
 //		    .fields("street", "city", "zipCode").build())
-//		  .nested(Forms.basic(Collegue.class, "collegues", MappingType.LIST)
+//		  .nested(Forms.basic(Collegue.class, "collegues", null, MappingType.LIST)
 //		    .fields("name", "email")
 //		    .nested(regDateMapping)
 //		    .build())

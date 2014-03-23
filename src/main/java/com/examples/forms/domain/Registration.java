@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import org.twinstone.formio.binding.ArgumentName;
@@ -31,11 +32,14 @@ public class Registration implements Serializable {
 	@Email
 	private String email;
 
+	@Valid
 	private Address contactAddress;
 
+	@Valid
 	@Size(min=1, message="{constraints.collegues.notEmpty}")
 	private List<Collegue> collegues;
 
+	@Valid
 	private NewCollegue newCollegue;
 	
 	private transient String internalId;

@@ -36,7 +36,7 @@
 	<form:input type="text" fieldName="birthDate" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="text" fieldName="phone" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="select" fieldName="nation" fields="${form.fields}" fieldMsgs="${fieldMsgs}" items="${nationItems}" bundleName="${bundleName}" />
-	<form:button name="submitted" label="Save" cssClass="btn btn-default btn-primary"/>
+	<form:button name="submitted" label="Save" styleClass="btn btn-default btn-primary"/>
 </form>
 
 </fmt:bundle>

@@ -55,7 +55,7 @@
 					</c:if>
 					<c:if test="${not multi}">
 						<c:forEach var="message" items="${fieldMsgs[field.name]}">
-							<div class="${message.severity.cssClass}"><c:out value="${message.text}" /></div>
+							<div class="${message.severity.styleClass}"><c:out value="${message.text}" /></div>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -75,7 +75,7 @@
 					</c:forEach>
 				</select>
 				<c:forEach var="message" items="${fieldMsgs[field.name]}">
-					<div class="${message.severity.cssClass}"><c:out value="${message.text}" /></div>
+					<div class="${message.severity.styleClass}"><c:out value="${message.text}" /></div>
 				</c:forEach>
 			</div>
 		</div>
@@ -98,7 +98,7 @@
 				</c:choose>
 				<c:if test="${not empty postfix}">${postfix}</c:if>
 				<c:forEach var="message" items="${fieldMsgs[field.name]}">
-					<div class="${message.severity.cssClass}"><c:out value="${message.text}" /></div>
+					<div class="${message.severity.styleClass}"><c:out value="${message.text}" /></div>
 				</c:forEach>
 			</div>
 		</div>

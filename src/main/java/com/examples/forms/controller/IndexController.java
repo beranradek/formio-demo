@@ -31,10 +31,12 @@ public class IndexController extends HttpServlet {
 	private static final String SUCCESS = "success";
 	
 	// immutable definition of the form, can be freely shared/cached
-	private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
-		// whitelist of properties to bind
-		.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
-		.build();
+	private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();
+			
+	//private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
+	//	// whitelist of properties to bind
+	//	.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
+	//	.build();	
 
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)

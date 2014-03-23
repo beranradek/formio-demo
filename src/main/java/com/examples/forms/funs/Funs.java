@@ -21,7 +21,7 @@ public class Funs {
 				}
 			}
 		}
-		return maxSeverity != null ? maxSeverity.getCssClass() : "";
+		return maxSeverity != null ? maxSeverity.getStyleClass() : "";
 	}
 
 }

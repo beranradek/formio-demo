@@ -103,9 +103,9 @@
 <c:set var="regDateFields" value="${newCollegueMapping.nested['regDate'].fields}" />
 <form:input type="text" fieldName="month" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 <form:input type="text" fieldName="year" fields="${regDateFields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-<form:button name="newCollegue" label="Add collegue" cssClass="btn btn-info"/>
+<form:button name="newCollegue" label="Add collegue" styleClass="btn btn-info"/>
 <hr/>	
-<form:button name="submitted" label="Confirm registration" cssClass="btn btn-default btn-primary"/>
+<form:button name="submitted" label="Confirm registration" styleClass="btn btn-default btn-primary"/>
 </form>
 
 </fmt:bundle>
