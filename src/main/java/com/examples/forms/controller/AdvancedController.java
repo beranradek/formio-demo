@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.twinstone.formio.FormData;
 import org.twinstone.formio.FormMapping;
 import org.twinstone.formio.Forms;
-import org.twinstone.formio.MappingType;
 import org.twinstone.formio.ParamsProvider;
 import org.twinstone.formio.servlet.HttpServletRequestParams;
 import org.twinstone.formio.upload.UploadedFile;
@@ -28,7 +27,6 @@ import com.examples.forms.domain.Address;
 import com.examples.forms.domain.AttendanceReason;
 import com.examples.forms.domain.Collegue;
 import com.examples.forms.domain.NewCollegue;
-import com.examples.forms.domain.RegDate;
 import com.examples.forms.domain.Registration;
 
 /**
@@ -148,6 +146,7 @@ public class AdvancedController extends HttpServlet {
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, 
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
+		// log.info(registrationForm + "\n");
 		FormMapping<Registration> filledForm = registrationForm.fill(formData);
 		// log.info(filledForm + "\n");
 		
