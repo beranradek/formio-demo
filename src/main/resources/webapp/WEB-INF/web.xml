@@ -42,6 +42,21 @@
     <servlet-name>AdvancedController</servlet-name>
     <servlet-class>net.formio.demo.controller.AdvancedController</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+    <init-param>
+    	<param-name>acceptRanges</param-name>
+    	<param-value>true</param-value>
+	</init-param>
+    <init-param>
+      <param-name>cacheControl</param-name>
+      <param-value>max-age=604800,public</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>IndexController</servlet-name>
     <url-pattern>/index.html</url-pattern>
