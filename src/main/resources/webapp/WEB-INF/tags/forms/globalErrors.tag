@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@attribute name="validationResult" required="true" rtexprvalue="true" type="org.twinstone.formio.validation.ValidationResult" %>
+<%@attribute name="validationResult" required="true" rtexprvalue="true" type="net.formio.validation.ValidationResult" %>
 
 <c:if test="${not empty validationResult and not validationResult.success}">
 	<div class="alert alert-danger">

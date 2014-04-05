@@ -3,11 +3,11 @@ apply plugin: 'eclipse'
 apply plugin:'java' // for heroku deployment
 apply plugin:'application' // for heroku deployment
 
-mainClassName = "com.examples.forms.HttpServer"
+mainClassName = "net.formio.demo.HttpServer"
 applicationName = "formio-demo"
 
 version = '1.0'
-group = 'com.examples.forms'
+group = 'net.formio.demo'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6

@@ -1,9 +1,9 @@
-package com.examples.forms.funs;
+package net.formio.demo.funs;
 
 import java.util.Collection;
 
-import org.twinstone.formio.validation.ConstraintViolationMessage;
-import org.twinstone.formio.validation.Severity;
+import net.formio.validation.ConstraintViolationMessage;
+import net.formio.validation.Severity;
 
 public class Funs {
 

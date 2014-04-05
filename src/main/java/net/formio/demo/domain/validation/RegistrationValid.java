@@ -5,7 +5,7 @@
  * Intended for internal use only.
  * http://www.etnetera.cz
  */
-package com.examples.forms.domain.validation;
+package net.formio.demo.domain.validation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

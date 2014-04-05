@@ -1,4 +1,4 @@
-package com.examples.forms;
+package net.formio.demo;
 
 import java.io.File;
 import java.net.URL;

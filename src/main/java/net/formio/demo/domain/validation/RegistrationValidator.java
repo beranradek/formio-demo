@@ -5,13 +5,13 @@
  * Intended for internal use only.
  * http://www.etnetera.cz
  */
-package com.examples.forms.domain.validation;
+package net.formio.demo.domain.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.examples.forms.domain.Address;
-import com.examples.forms.domain.Registration;
+import net.formio.demo.domain.Address;
+import net.formio.demo.domain.Registration;
 
 public class RegistrationValidator implements ConstraintValidator<RegistrationValid, Registration> {
 

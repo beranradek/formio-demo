@@ -1,4 +1,4 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,13 +8,12 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
-import org.twinstone.formio.binding.ArgumentName;
-import org.twinstone.formio.binding.Ignored;
-import org.twinstone.formio.upload.UploadedFileWrapper;
-import org.twinstone.formio.upload.UploadedFile;
-import org.twinstone.formio.validation.constraints.Email;
-
-import com.examples.forms.domain.validation.RegistrationValid;
+import net.formio.binding.ArgumentName;
+import net.formio.binding.Ignored;
+import net.formio.demo.domain.validation.RegistrationValid;
+import net.formio.upload.UploadedFile;
+import net.formio.upload.UploadedFileWrapper;
+import net.formio.validation.constraints.Email;
 
 @RegistrationValid
 public class Registration implements Serializable {

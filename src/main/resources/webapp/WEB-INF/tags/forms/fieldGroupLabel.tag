@@ -3,7 +3,7 @@
 <%@taglib prefix="form" tagdir="/WEB-INF/tags/forms" %>
 <%@taglib prefix="myfn" uri="/WEB-INF/custom-functions.tld" %>
 <%@attribute name="fieldMsgs" required="true" rtexprvalue="true" type="java.util.Map" %>
-<%@attribute name="formField" required="true" rtexprvalue="true" type="org.twinstone.formio.FormField" %>
+<%@attribute name="formField" required="true" rtexprvalue="true" type="net.formio.FormField" %>
 <%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
 
 <fmt:bundle basename="${bundleName}">

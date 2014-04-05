@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8" %>
 <%@include file="include.jsp" %>
 <jsp:include page="header.jsp" />
-<c:set var="bundleName" value="com.examples.forms.domain.Registration" />
+<c:set var="bundleName" value="net.formio.demo.domain.Registration" />
 <fmt:bundle basename="${bundleName}">
 <h1>Formio demo</h1>
 <ul class="nav nav-tabs">

@@ -1,9 +1,9 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 
-import org.twinstone.formio.validation.constraints.Email;
-import org.twinstone.formio.validation.constraints.NotEmpty;
+import net.formio.validation.constraints.Email;
+import net.formio.validation.constraints.NotEmpty;
 
 public class Collegue implements Serializable {
 	private static final long serialVersionUID = -9179723481190386954L;

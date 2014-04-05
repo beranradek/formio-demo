@@ -1,4 +1,4 @@
-package com.examples.forms.controller;
+package net.formio.demo.controller;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,21 +13,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.formio.FormData;
+import net.formio.FormMapping;
+import net.formio.Forms;
+import net.formio.ParamsProvider;
+import net.formio.demo.domain.Address;
+import net.formio.demo.domain.AttendanceReason;
+import net.formio.demo.domain.Collegue;
+import net.formio.demo.domain.NewCollegue;
+import net.formio.demo.domain.Registration;
+import net.formio.servlet.HttpServletRequestParams;
+import net.formio.upload.UploadedFile;
+import net.formio.upload.UploadedFileWrapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.twinstone.formio.FormData;
-import org.twinstone.formio.FormMapping;
-import org.twinstone.formio.Forms;
-import org.twinstone.formio.ParamsProvider;
-import org.twinstone.formio.servlet.HttpServletRequestParams;
-import org.twinstone.formio.upload.UploadedFile;
-import org.twinstone.formio.upload.UploadedFileWrapper;
-
-import com.examples.forms.domain.Address;
-import com.examples.forms.domain.AttendanceReason;
-import com.examples.forms.domain.Collegue;
-import com.examples.forms.domain.NewCollegue;
-import com.examples.forms.domain.Registration;
 
 /**
  * Advanced form controller.

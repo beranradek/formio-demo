@@ -1,4 +1,4 @@
-package com.examples.forms.controller;
+package net.formio.demo.controller;
 
 import java.io.IOException;
 import java.util.Date;
@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.formio.FormData;
+import net.formio.FormMapping;
+import net.formio.Forms;
+import net.formio.demo.domain.Nation;
+import net.formio.demo.domain.Person;
+import net.formio.servlet.HttpServletRequestParams;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.twinstone.formio.FormData;
-import org.twinstone.formio.FormMapping;
-import org.twinstone.formio.Forms;
-import org.twinstone.formio.servlet.HttpServletRequestParams;
-
-import com.examples.forms.domain.Nation;
-import com.examples.forms.domain.Person;
 
 /**
  * Home page controller.

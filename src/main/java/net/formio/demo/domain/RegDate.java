@@ -1,8 +1,8 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 
-import org.twinstone.formio.binding.ArgumentName;
+import net.formio.binding.ArgumentName;
 
 public class RegDate implements Serializable {
 	private static final long serialVersionUID = 8798832969912892639L;

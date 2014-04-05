@@ -1,10 +1,10 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
-import org.twinstone.formio.validation.constraints.Email;
-import org.twinstone.formio.validation.constraints.NotEmpty;
+import net.formio.validation.constraints.Email;
+import net.formio.validation.constraints.NotEmpty;
 
 public class NewCollegue implements Serializable {
 	private static final long serialVersionUID = 3829658946967880236L;

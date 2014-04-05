@@ -1,10 +1,10 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 
 import javax.validation.constraints.Pattern;
 
-import org.twinstone.formio.binding.ArgumentName;
+import net.formio.binding.ArgumentName;
 
 public class Address implements Serializable {
 	private static final long serialVersionUID = 2293884142466950281L;

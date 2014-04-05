@@ -1,4 +1,4 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,9 +7,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.twinstone.formio.binding.ArgumentName;
-import org.twinstone.formio.validation.SeverityPayload;
-import org.twinstone.formio.validation.constraints.NotEmpty;
+import net.formio.binding.ArgumentName;
+import net.formio.validation.SeverityPayload;
+import net.formio.validation.constraints.NotEmpty;
 
 public class Person implements Serializable {
 	private static final long serialVersionUID = -1568960763694971728L;

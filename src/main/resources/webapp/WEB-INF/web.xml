@@ -24,13 +24,23 @@
   <welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
   </welcome-file-list>
+  <filter>
+  	<filter-name>CacheFilter</filter-name>
+  	<filter-class>net.formio.demo.filter.StaticResourceCacheFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>CacheFilter</filter-name>
+  	<url-pattern>/bootstrap/*</url-pattern>
+  	<url-pattern>/javascripts/*</url-pattern>
+  	<url-pattern>/stylesheets/*</url-pattern>
+  </filter-mapping>
   <servlet>
     <servlet-name>IndexController</servlet-name>
-    <servlet-class>com.examples.forms.controller.IndexController</servlet-class>
+    <servlet-class>net.formio.demo.controller.IndexController</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>AdvancedController</servlet-name>
-    <servlet-class>com.examples.forms.controller.AdvancedController</servlet-class>
+    <servlet-class>net.formio.demo.controller.AdvancedController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>IndexController</servlet-name>

@@ -4,7 +4,7 @@
 <%@taglib prefix="myfn" uri="/WEB-INF/custom-functions.tld" %>
 <%@taglib prefix="form" tagdir="/WEB-INF/tags/forms" %>
 <%@attribute name="fieldMsgs" required="true" rtexprvalue="true" type="java.util.Map" %>
-<%@attribute name="mapping" required="true" rtexprvalue="true" type="org.twinstone.formio.FormMapping" %>
+<%@attribute name="mapping" required="true" rtexprvalue="true" type="net.formio.FormMapping" %>
 <%@attribute name="showLength" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
 

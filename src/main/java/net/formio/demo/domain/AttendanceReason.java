@@ -1,4 +1,4 @@
-package com.examples.forms.domain;
+package net.formio.demo.domain;
 
 public enum AttendanceReason {
 	PERSONAL_INTEREST,
