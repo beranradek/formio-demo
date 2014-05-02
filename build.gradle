@@ -34,8 +34,7 @@ dependencies {
     compile "org.hibernate:hibernate-validator:4.3.1.Final"
     compile "commons-fileupload:commons-fileupload:1.2.2"
     compile "org.apache.commons:commons-io:1.3.2"
-    // compile "javax.servlet:servlet-api:3.0-alpha-1"
-    compile files('./lib/formio-1.0.1-SNAPSHOT.jar')
+    compile "net.formio:formio:1.0.3"
 
 	testCompile 'junit:junit:4.8.2'
 

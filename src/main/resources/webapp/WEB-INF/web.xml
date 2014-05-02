@@ -34,15 +34,8 @@
   	<url-pattern>/javascripts/*</url-pattern>
   	<url-pattern>/stylesheets/*</url-pattern>
   </filter-mapping>
-  <servlet>
-    <servlet-name>IndexController</servlet-name>
-    <servlet-class>net.formio.demo.controller.IndexController</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>AdvancedController</servlet-name>
-    <servlet-class>net.formio.demo.controller.AdvancedController</servlet-class>
-  </servlet>
   
+  <!-- 
   <servlet>
     <servlet-name>default</servlet-name>
     <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
@@ -56,14 +49,26 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  -->
   
+  <servlet>
+  	<servlet-name>IndexController</servlet-name>
+  	<servlet-class>net.formio.demo.controller.IndexController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>SimpleController</servlet-name>
+  	<servlet-class>net.formio.demo.controller.SimpleController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AdvancedController</servlet-name>
+  	<servlet-class>net.formio.demo.controller.AdvancedController</servlet-class>
+  </servlet>
   <servlet-mapping>
-    <servlet-name>IndexController</servlet-name>
-    <url-pattern>/index.html</url-pattern>
+  	<servlet-name>SimpleController</servlet-name>
+  	<url-pattern>/simple.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>AdvancedController</servlet-name>
-    <url-pattern>/advanced.html</url-pattern>
+  	<servlet-name>AdvancedController</servlet-name>
+  	<url-pattern>/advanced.html</url-pattern>
   </servlet-mapping>
-  
 </web-app>

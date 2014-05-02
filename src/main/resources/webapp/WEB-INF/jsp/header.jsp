@@ -18,6 +18,7 @@
 	<!-- JQuery UI for datepicker -->
 	<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/stylesheets/jquery-ui-1.10.3.custom.min.css">
 	<!-- Custom CSS -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/stylesheets/app.css">
     
     <!-- JQuery - Bootstrap's dependency -->

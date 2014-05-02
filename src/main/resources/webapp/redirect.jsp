@@ -1,3 +1,3 @@
 <%
-response.sendRedirect(response.encodeRedirectURL("index.html"));
+response.sendRedirect(response.encodeRedirectURL("simple.html"));
 %>

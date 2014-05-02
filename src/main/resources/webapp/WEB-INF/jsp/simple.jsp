@@ -21,13 +21,13 @@
 
 <p style="margin:0.5em">Welcome in formio demo application.</p>
 
-<c:if test="${form.validationResult.success or not empty success}">
+<c:if test="${not empty success}">
 	<div class="alert alert-success">Data successfully saved.</div>
 </c:if>
 <form:globalErrors validationResult="${form.validationResult}"/>
 <c:set var="fieldMsgs" value="${form.validationResult.fieldMessages}" />
 
-<form action="<c:url value="/index.html"/>" method="post" class="form-horizontal" role="form">
+<form action="<c:url value="/simple.html"/>" method="post" class="form-horizontal" role="form">
 	<form:input type="hidden" fieldName="personId" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="text" fieldName="firstName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="text" fieldName="lastName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />

@@ -14,9 +14,7 @@ public class NewCollegue implements Serializable {
 		this.regDate = new RegDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 	}
 
-	public interface New {
-		/** marker interface */
-	}
+	public interface New { /** marker interface */ }
 
 	@NotEmpty(groups = New.class)
 	private String name;

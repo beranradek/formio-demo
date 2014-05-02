@@ -36,8 +36,8 @@ public class HttpServer {
         context.addServlet(jspServletHolder, "*.jsp");
         // taken from web.xml:
         // context.setDisplayName("Formio demo");
-        // context.setWelcomeFiles(new String[] { "index.html" });
-        // context.addServlet(new ServletHolder(new IndexController()), "/");
+        // context.setWelcomeFiles(new String[] { "simple.html" });
+        // context.addServlet(new ServletHolder(new SimpleController()), "/");
         // context.addServlet(new ServletHolder(new AdvancedController()), "/advanced.html");
         context.setResourceBase(getBaseUrl());
         Server server = new Server(Integer.valueOf(portStr).intValue());

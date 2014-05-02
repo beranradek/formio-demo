@@ -6,6 +6,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -25,12 +26,13 @@ import net.formio.demo.domain.Registration;
 import net.formio.servlet.HttpServletRequestParams;
 import net.formio.upload.UploadedFile;
 import net.formio.upload.UploadedFileWrapper;
+import net.formio.validation.ValidationResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Advanced form controller.
+ * Advanced registration editing form controller.
  */
 public class AdvancedController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -41,6 +43,8 @@ public class AdvancedController extends HttpServlet {
 	private static final String ATT_REGISTRATION_CV = "registrationCv";
 	private static final String SUCCESS = "success";
 	private static final int MAX_CERTIFICATE_CNT = 3;
+	
+	private static final Locale LOCALE = new Locale("en");
 	
 	// immutable definition of the form, can be freely shared/cached
 	private static final FormMapping<Registration> registrationForm =
@@ -70,7 +74,7 @@ public class AdvancedController extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		ParamsProvider reqParams = new HttpServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);
@@ -84,7 +88,7 @@ public class AdvancedController extends HttpServlet {
 			// no submission, loading currently stored data to show it in the form
 			// log.info(registrationForm + "\n");
 			Registration reg = findRegistration(request);
-			FormData<Registration> formData = new FormData<Registration>(reg, null);
+			FormData<Registration> formData = new FormData<Registration>(reg, ValidationResult.empty);
 			renderForm(request, response, formData);
 		}
 	}
@@ -111,7 +115,7 @@ public class AdvancedController extends HttpServlet {
 
 	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
-		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, NewCollegue.New.class);
+		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, LOCALE, NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
 			Registration reg = newCollegueFormData.getData();
 			updateWithRememberedFiles(request, reg);
@@ -131,7 +135,7 @@ public class AdvancedController extends HttpServlet {
 	}
 
 	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException, ServletException {
-		FormData<Registration> formData = registrationForm.bind(reqParams); // shown form data updated from request right here
+		FormData<Registration> formData = registrationForm.bind(reqParams, LOCALE); // shown form data updated from request right here
 		if (formData.isValid()) {
 			saveRegistration(request, formData.getData());
 			redirect(request, response, true);
@@ -146,9 +150,9 @@ public class AdvancedController extends HttpServlet {
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, 
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
-		// log.info(registrationForm + "\n");
-		FormMapping<Registration> filledForm = registrationForm.fill(formData);
-		// log.info(filledForm + "\n");
+		log.info(registrationForm + "\n");
+		FormMapping<Registration> filledForm = registrationForm.fill(formData, LOCALE);
+		log.info(filledForm + "\n");
 		
 		// Passing form to the template
 		request.setAttribute("form", filledForm);
@@ -274,7 +278,6 @@ public class AdvancedController extends HttpServlet {
 		collegues.add(jane);
 		
 		aRegistration.setCollegues(collegues);
-		aRegistration.setNewCollegue(new NewCollegue());
 		
 		List<UploadedFileWrapper> certs = initCertificates();
 		aRegistration.setCertificates(certs);

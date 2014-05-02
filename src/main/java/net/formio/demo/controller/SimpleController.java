@@ -3,6 +3,7 @@ package net.formio.demo.controller;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -16,35 +17,38 @@ import net.formio.Forms;
 import net.formio.demo.domain.Nation;
 import net.formio.demo.domain.Person;
 import net.formio.servlet.HttpServletRequestParams;
+import net.formio.validation.ValidationResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Home page controller.
+ * Simple person editing form controller.
  */
-public class IndexController extends HttpServlet {
+public class SimpleController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
+	private static final Logger log = LoggerFactory.getLogger(SimpleController.class);
 	
 	private static final String ATT_PERSON = "person";
 	private static final String SUCCESS = "success";
 	
+	private static final Locale LOCALE = new Locale("en");
+	
 	// immutable definition of the form, can be freely shared/cached
-	private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();
+	// private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();
 			
-	//private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
-	//	// whitelist of properties to bind
-	//	.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
-	//	.build();	
+	private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
+		// whitelist of properties to bind
+		.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
+		.build();	
 
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		if (request.getParameter("submitted") != null) {
-			FormData<Person> formData = personForm.bind(new HttpServletRequestParams(request));
+			FormData<Person> formData = personForm.bind(new HttpServletRequestParams(request), LOCALE);
 			if (formData.isValid()) {
 				savePerson(request, formData.getData());
 				redirect(request, response, true);
@@ -54,13 +58,13 @@ public class IndexController extends HttpServlet {
 			}
 		} else {
 			// loading currently stored data to show it in the form
-			FormData<Person> formData = new FormData<Person>(findPerson(request), null);
+			FormData<Person> formData = new FormData<Person>(findPerson(request), ValidationResult.empty);
 			renderForm(request, response, formData);
 		}
 	}
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormData<Person> formData) throws ServletException, IOException {
-		FormMapping<Person> filledForm = personForm.fill(formData);
+		FormMapping<Person> filledForm = personForm.fill(formData, LOCALE);
 		request.setAttribute("form", filledForm);
 		Map<Nation, String> nationItems = new HashMap<Nation, String>();
 		for (Nation nation : Nation.values()) {
@@ -68,7 +72,7 @@ public class IndexController extends HttpServlet {
 		}
 		request.setAttribute("nationItems", nationItems);
 		if (request.getParameter(SUCCESS) != null) request.setAttribute(SUCCESS, "1");
-		request.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/simple.jsp").forward(request, response);
 	}
 
 	/**
@@ -101,7 +105,7 @@ public class IndexController extends HttpServlet {
 	
 	private void redirect(HttpServletRequest request,
 		HttpServletResponse response, boolean dataSaved) throws IOException {
-		response.sendRedirect(request.getContextPath() + "/index.html" + (dataSaved ? ("?" + SUCCESS + "=1") : ""));
+		response.sendRedirect(request.getContextPath() + "/simple.html" + (dataSaved ? ("?" + SUCCESS + "=1") : ""));
 	}
 	
 	private Person initPerson() {

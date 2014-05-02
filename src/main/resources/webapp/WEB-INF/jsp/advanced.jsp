@@ -5,11 +5,11 @@
 <fmt:bundle basename="${bundleName}">
 <h1>Formio demo</h1>
 <ul class="nav nav-tabs">
-  <li><a href="index.html">Simple</a></li>
+  <li><a href="<c:url value="/simple.html"/>">Simple</a></li>
   <li class="active"><a href="#">Advanced</a></li>
 </ul>
 
-<c:if test="${form.validationResult.success or not empty success}">
+<c:if test="${not empty success}">
 	<div class="alert alert-success">Data successfully saved.</div>
 </c:if>
 <form:globalErrors validationResult="${form.validationResult}"/>
