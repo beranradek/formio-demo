@@ -12,6 +12,7 @@ dist
 /.classpath
 /.project
 /RUNNING_PID
+/work
 .sc
 
 # SBT

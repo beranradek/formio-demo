@@ -21,7 +21,8 @@ public class HttpServer {
 		// SLF4JBridgeHandler.install();
 		
 		String portStr = System.getenv("PORT");
-		if (portStr == null || portStr.isEmpty()) throw new IllegalStateException("Port not specified, please set environment variable PORT");
+		if (portStr == null || portStr.isEmpty()) portStr = "8080";
+		// if (portStr == null || portStr.isEmpty()) throw new IllegalStateException("Port not specified, please set environment variable PORT");
 		
 		ServletHolder jspServletHolder = new ServletHolder("jspServlet", new JspServlet());
 		// these two lines are not strictly required - they will keep classes generated from JSP in "${javax.servlet.context.tempdir}/views/generated"

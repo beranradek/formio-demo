@@ -35,7 +35,6 @@
   	<url-pattern>/stylesheets/*</url-pattern>
   </filter-mapping>
   
-  <!-- 
   <servlet>
     <servlet-name>default</servlet-name>
     <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
@@ -49,12 +48,7 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  -->
   
-  <servlet>
-  	<servlet-name>IndexController</servlet-name>
-  	<servlet-class>net.formio.demo.controller.IndexController</servlet-class>
-  </servlet>
   <servlet>
   	<servlet-name>SimpleController</servlet-name>
   	<servlet-class>net.formio.demo.controller.SimpleController</servlet-class>
