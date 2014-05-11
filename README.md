@@ -1,5 +1,5 @@
 # Formio Demo
 
-#### Demo of simple and advanced Java form using [Formio library](http://formio.net "Formio library").
+#### Demo of simple and advanced Java form using [Formio library](http://www.formio.net "Formio library").
 
 Live on http://formio-demo.herokuapp.com/

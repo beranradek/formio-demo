@@ -16,7 +16,9 @@ import net.formio.FormMapping;
 import net.formio.Forms;
 import net.formio.demo.domain.Nation;
 import net.formio.demo.domain.Person;
-import net.formio.servlet.HttpServletRequestParams;
+import net.formio.security.TokenException;
+import net.formio.servlet.ServletRequestParams;
+import net.formio.servlet.ServletRequestContext;
 import net.formio.validation.ValidationResult;
 
 import org.slf4j.Logger;
@@ -37,7 +39,7 @@ public class SimpleController extends HttpServlet {
 	// immutable definition of the form, can be freely shared/cached
 	// private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();
 			
-	private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
+	private static final FormMapping<Person> personForm = Forms.basicSecured(Person.class, "person")
 		// whitelist of properties to bind
 		.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
 		.build();	
@@ -47,24 +49,28 @@ public class SimpleController extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		if (request.getParameter("submitted") != null) {
-			FormData<Person> formData = personForm.bind(new HttpServletRequestParams(request), LOCALE);
-			if (formData.isValid()) {
-				savePerson(request, formData.getData());
-				redirect(request, response, true);
+		try {
+			if (request.getParameter("submitted") != null) {
+				FormData<Person> formData = personForm.bind(new ServletRequestParams(request), LOCALE);
+				if (formData.isValid()) {
+					savePerson(request, formData.getData());
+					redirect(request, response, true);
+				} else {
+					// show validation errors
+					renderForm(request, response, formData);
+				}
 			} else {
-				// show validation errors
+				// loading currently stored data to show it in the form
+				FormData<Person> formData = new FormData<Person>(findPerson(request), ValidationResult.empty);
 				renderForm(request, response, formData);
 			}
-		} else {
-			// loading currently stored data to show it in the form
-			FormData<Person> formData = new FormData<Person>(findPerson(request), ValidationResult.empty);
-			renderForm(request, response, formData);
+		} catch (TokenException ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormData<Person> formData) throws ServletException, IOException {
-		FormMapping<Person> filledForm = personForm.fill(formData, LOCALE);
+		FormMapping<Person> filledForm = personForm.fill(formData, LOCALE, new ServletRequestContext(request));
 		request.setAttribute("form", filledForm);
 		Map<Nation, String> nationItems = new HashMap<Nation, String>();
 		for (Nation nation : Nation.values()) {

@@ -28,6 +28,7 @@
 <c:set var="fieldMsgs" value="${form.validationResult.fieldMessages}" />
 
 <form action="<c:url value="/simple.html"/>" method="post" class="form-horizontal" role="form">
+	<form:input type="hidden" fieldName="formAuthToken" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="hidden" fieldName="personId" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="text" fieldName="firstName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 	<form:input type="text" fieldName="lastName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />

@@ -32,7 +32,7 @@ dependencies {
     compile "javax.servlet:jstl:1.2" // jstl >= 1.2 already contains taglibs
     
     compile "org.hibernate:hibernate-validator:5.1.0.Final"
-    compile "net.formio:formio:1.0.3"
+    compile "net.formio:formio:1.0.4"
 
 	testCompile 'junit:junit:4.8.2'
 

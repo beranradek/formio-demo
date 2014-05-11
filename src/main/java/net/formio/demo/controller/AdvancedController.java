@@ -17,13 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 import net.formio.FormData;
 import net.formio.FormMapping;
 import net.formio.Forms;
-import net.formio.ParamsProvider;
+import net.formio.RequestParams;
 import net.formio.demo.domain.Address;
 import net.formio.demo.domain.AttendanceReason;
 import net.formio.demo.domain.Collegue;
 import net.formio.demo.domain.NewCollegue;
 import net.formio.demo.domain.Registration;
-import net.formio.servlet.HttpServletRequestParams;
+import net.formio.security.TokenException;
+import net.formio.servlet.ServletRequestParams;
+import net.formio.servlet.ServletRequestContext;
 import net.formio.upload.UploadedFile;
 import net.formio.upload.UploadedFileWrapper;
 import net.formio.validation.ValidationResult;
@@ -48,8 +50,8 @@ public class AdvancedController extends HttpServlet {
 	
 	// immutable definition of the form, can be freely shared/cached
 	private static final FormMapping<Registration> registrationForm =
-		Forms.automatic(Registration.class, "registration")
-			.nested(Forms.automatic(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance")).build())
+		Forms.automaticSecured(Registration.class, "registration")
+			.nested(Forms.automaticSecured(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance")).build())
 			.build();
 			
 //	private static final FormMapping<RegDate> regDateMapping = Forms.basic(RegDate.class, "regDate").fields("month", "year").build();
@@ -75,7 +77,7 @@ public class AdvancedController extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		ParamsProvider reqParams = new HttpServletRequestParams(request);
+		RequestParams reqParams = new ServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);
 		} else if (reqParams.getRequestError() != null || reqParams.getParamValue("newCollegue") != null) {
@@ -93,7 +95,7 @@ public class AdvancedController extends HttpServlet {
 		}
 	}
 
-	protected void processRemoveCollegue(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException {
+	protected void processRemoveCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException {
 		String indexAsStr = reqParams.getParamValue("removeCollegue");
 		// Form cannot be bound when using GET for remove: FormData<Registration> formData = registrationForm.bind(reqParams);
 		// Request does not provide all necessary data.
@@ -103,7 +105,7 @@ public class AdvancedController extends HttpServlet {
 		redirect(request, response, false);
 	}
 	
-	protected void processRemoveCertificate(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException {
+	protected void processRemoveCertificate(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException {
 		// Form cannot be bound when using GET for remove: FormData<Registration> formData = registrationForm.bind(reqParams);
 		// Request does not provide all necessary data.
 		// Registration reg = formData.getData();
@@ -113,7 +115,7 @@ public class AdvancedController extends HttpServlet {
 		redirect(request, response, false);
 	}
 
-	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException, ServletException {
+	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
 		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, LOCALE, NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
@@ -134,16 +136,20 @@ public class AdvancedController extends HttpServlet {
 		}
 	}
 
-	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, ParamsProvider reqParams) throws IOException, ServletException {
-		FormData<Registration> formData = registrationForm.bind(reqParams, LOCALE); // shown form data updated from request right here
-		if (formData.isValid()) {
-			saveRegistration(request, formData.getData());
-			redirect(request, response, true);
-		} else {
-			// show validation errors
-			updateWithRememberedFiles(request, formData.getData());
-			rememberFilesTemporarily(request, formData.getData());
-			renderForm(request, response, formData);
+	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
+		try {
+			FormData<Registration> formData = registrationForm.bind(reqParams, LOCALE); // shown form data updated from request right here
+			if (formData.isValid()) {
+				saveRegistration(request, formData.getData());
+				redirect(request, response, true);
+			} else {
+				// show validation errors
+				updateWithRememberedFiles(request, formData.getData());
+				rememberFilesTemporarily(request, formData.getData());
+				renderForm(request, response, formData);
+			}
+		} catch (TokenException ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
 
@@ -151,7 +157,7 @@ public class AdvancedController extends HttpServlet {
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
 		log.info(registrationForm + "\n");
-		FormMapping<Registration> filledForm = registrationForm.fill(formData, LOCALE);
+		FormMapping<Registration> filledForm = registrationForm.fill(formData, LOCALE, new ServletRequestContext(request));
 		log.info(filledForm + "\n");
 		
 		// Passing form to the template

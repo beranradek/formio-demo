@@ -17,6 +17,7 @@
 
 <form action="<c:url value="/advanced.html"/>" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
 
+<form:input type="hidden" fieldName="formAuthToken" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
 <form:input type="file" fieldName="cv" fields="${form.fields}" fieldMsgs="${fieldMsgs}" postfix="${form.fields['cv'].filledObject.fileName}" bundleName="${bundleName}" />
 
 <c:set var="certificatesMapping" value="${form.nested['certificates']}"/>
