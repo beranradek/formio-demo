@@ -6,11 +6,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,30 +21,25 @@ import net.formio.demo.domain.AttendanceReason;
 import net.formio.demo.domain.Collegue;
 import net.formio.demo.domain.NewCollegue;
 import net.formio.demo.domain.Registration;
+import net.formio.demo.servlet.SessionStorage;
 import net.formio.security.TokenException;
-import net.formio.servlet.ServletRequestParams;
 import net.formio.servlet.ServletRequestContext;
+import net.formio.servlet.ServletRequestParams;
 import net.formio.upload.UploadedFile;
 import net.formio.upload.UploadedFileWrapper;
 import net.formio.validation.ValidationResult;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Advanced registration editing form controller.
+ * @author Radek Beran
  */
-public class AdvancedController extends HttpServlet {
+public class AdvancedController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(AdvancedController.class);
-	
-	private static final String ATT_REGISTRATION = "registration";
-	private static final String ATT_REGISTRATION_CERTIFICATES = "registrationCertificates";
-	private static final String ATT_REGISTRATION_CV = "registrationCv";
-	private static final String SUCCESS = "success";
+	private static final String PAGE_NAME = "advanced";
+	private static final SessionStorage<Registration> regStorage = new SessionStorage<Registration>("registration");
+	private static final SessionStorage<ArrayList<UploadedFileWrapper>> regCertsStorage = new SessionStorage<ArrayList<UploadedFileWrapper>>("registrationCertificates");
+	private static final SessionStorage<UploadedFile> regCvStorage = new SessionStorage<UploadedFile>("registrationCv");
 	private static final int MAX_CERTIFICATE_CNT = 3;
-	
-	private static final Locale LOCALE = new Locale("en");
 	
 	// immutable definition of the form, can be freely shared/cached
 	private static final FormMapping<Registration> registrationForm =
@@ -72,11 +65,8 @@ public class AdvancedController extends HttpServlet {
 //		    .build())
 //		  .build();
 
-	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html; charset=UTF-8");
+	@Override
+	protected void processRequestInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestParams reqParams = new ServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);
@@ -102,7 +92,7 @@ public class AdvancedController extends HttpServlet {
 		// Registration reg = formData.getData();
 		Registration reg = findRegistration(request);
 		removeCollegue(request, Integer.valueOf(indexAsStr).intValue(), reg);
-		redirect(request, response, false);
+		redirect(request, response, PAGE_NAME, false);
 	}
 	
 	protected void processRemoveCertificate(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException {
@@ -112,18 +102,18 @@ public class AdvancedController extends HttpServlet {
 		Registration reg = findRegistration(request);
 		String indexAsStr = reqParams.getParamValue("removeCertificate");
 		removeCertificate(request, Integer.valueOf(indexAsStr).intValue(), reg);
-		redirect(request, response, false);
+		redirect(request, response, PAGE_NAME, false);
 	}
 
 	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
-		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, LOCALE, NewCollegue.New.class);
+		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, DEFAULT_LOCALE, NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
 			Registration reg = newCollegueFormData.getData();
 			updateWithRememberedFiles(request, reg);
 			rememberFilesTemporarily(request, reg);
 			addNewCollegue(request, newCollegueFormData.getData().getNewCollegue(), reg);
-			redirect(request, response, false);
+			redirect(request, response, PAGE_NAME, false);
 		} else {
 			// show validation errors
 			Registration reg = newCollegueFormData.getData();
@@ -138,10 +128,10 @@ public class AdvancedController extends HttpServlet {
 
 	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		try {
-			FormData<Registration> formData = registrationForm.bind(reqParams, LOCALE); // shown form data updated from request right here
+			FormData<Registration> formData = registrationForm.bind(reqParams, DEFAULT_LOCALE); // shown form data updated from request right here
 			if (formData.isValid()) {
 				saveRegistration(request, formData.getData());
-				redirect(request, response, true);
+				redirect(request, response, PAGE_NAME, true);
 			} else {
 				// show validation errors
 				updateWithRememberedFiles(request, formData.getData());
@@ -157,36 +147,13 @@ public class AdvancedController extends HttpServlet {
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
 		log.info(registrationForm + "\n");
-		FormMapping<Registration> filledForm = registrationForm.fill(formData, LOCALE, new ServletRequestContext(request));
+		FormMapping<Registration> filledForm = registrationForm.fill(formData, DEFAULT_LOCALE, new ServletRequestContext(request));
 		log.info(filledForm + "\n");
 		
 		// Passing form to the template
-		request.setAttribute("form", filledForm);
 		request.setAttribute("interests", Registration.allInterests()); // codebook
 		request.setAttribute("attendanceReasons", AttendanceReason.values()); // codebook
-		if (request.getParameter(SUCCESS) != null) request.setAttribute(SUCCESS, "1");
-		request.getRequestDispatcher("/WEB-INF/jsp/advanced.jsp").forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
-	}
-	
-	private void redirect(HttpServletRequest request,
-			HttpServletResponse response, boolean dataSaved) throws IOException {
-		response.sendRedirect(request.getContextPath() + "/advanced.html" + (dataSaved ? ("?" + SUCCESS + "=1") : ""));
+		super.renderForm(request, response, filledForm, PAGE_NAME);
 	}
 	
 	private void saveRegistration(HttpServletRequest request, Registration newReg) {
@@ -204,11 +171,11 @@ public class AdvancedController extends HttpServlet {
 		clearRememberedFiles(request);
 		// Files were stored, data of files are not hold any more, we will reset the files
 		newReg.setCertificates(initCertificates());
-		request.getSession().setAttribute(ATT_REGISTRATION, newReg);
+		regStorage.storeData(request.getSession(), newReg);
 	}
 	
 	private Registration findRegistration(HttpServletRequest request) {
-		Registration reg = (Registration)request.getSession().getAttribute(ATT_REGISTRATION);
+		Registration reg = regStorage.findData(request.getSession());
 		if (reg == null) {
 			reg = initRegistration();
 		}
@@ -220,7 +187,7 @@ public class AdvancedController extends HttpServlet {
 		newCollegues.add(newCollegue.toCollegue());
 		registration.setCollegues(newCollegues);
 		registration.setNewCollegue(new NewCollegue());
-		request.getSession().setAttribute(ATT_REGISTRATION, registration);
+		regStorage.storeData(request.getSession(), registration);
 	}
 	
 	private void removeCollegue(HttpServletRequest request, int index, Registration registration) {
@@ -230,7 +197,7 @@ public class AdvancedController extends HttpServlet {
 			newCollegues.remove(index);
 			registration.setCollegues(newCollegues);
 		}
-		request.getSession().setAttribute(ATT_REGISTRATION, registration);
+		regStorage.storeData(request.getSession(), registration);
 	}
 	
 	private void removeCertificate(HttpServletRequest request, int index, Registration registration) {
@@ -240,9 +207,9 @@ public class AdvancedController extends HttpServlet {
 			newCerts.remove(index);
 			newCerts = appendEmptyCertsUpToMax(newCerts);
 			registration.setCertificates(newCerts);
-			request.getSession().setAttribute(ATT_REGISTRATION_CERTIFICATES, registration.getCertificates());
+			regCertsStorage.storeData(request.getSession(), (ArrayList<UploadedFileWrapper>)registration.getCertificates());
 		}
-		request.getSession().setAttribute(ATT_REGISTRATION, registration);
+		regStorage.storeData(request.getSession(), registration);
 	}
 	
 	private void saveFile(UploadedFile file) {
@@ -300,16 +267,15 @@ public class AdvancedController extends HttpServlet {
 		List<UploadedFileWrapper> certs = appendEmptyCertsUpToMax(reg.getCertificates());
 		reg.setCertificates(certs);
 		if (reg.getCertificates() != null && !reg.getCertificates().isEmpty()) {
-			request.getSession().setAttribute(ATT_REGISTRATION_CERTIFICATES, reg.getCertificates());
+			regCertsStorage.storeData(request.getSession(), (ArrayList<UploadedFileWrapper>)reg.getCertificates());
 		}
 		if (reg.getCv() != null) {
-			request.getSession().setAttribute(ATT_REGISTRATION_CV, reg.getCv());
+			regCvStorage.storeData(request.getSession(), reg.getCv());
 		}
 	}
 	
 	private void updateWithRememberedFiles(HttpServletRequest request, Registration reg) {
-		@SuppressWarnings("unchecked")
-		List<UploadedFileWrapper> list = (List<UploadedFileWrapper>)request.getSession().getAttribute(ATT_REGISTRATION_CERTIFICATES);
+		List<UploadedFileWrapper> list = regCertsStorage.findData(request.getSession());
 		if (reg.getCertificates() == null || reg.getCertificates().isEmpty()) {
 			if (list != null) {
 				list = appendEmptyCertsUpToMax(list);
@@ -331,7 +297,7 @@ public class AdvancedController extends HttpServlet {
 			}
 		}
 		if (reg.getCv() == null) {
-			reg.setCv((UploadedFile)request.getSession().getAttribute(ATT_REGISTRATION_CV));
+			reg.setCv(regCvStorage.findData(request.getSession()));
 		}
 	}
 	
@@ -347,8 +313,8 @@ public class AdvancedController extends HttpServlet {
 	}
 
 	private void clearRememberedFiles(HttpServletRequest request) {
-		request.getSession().removeAttribute(ATT_REGISTRATION_CERTIFICATES);
-		request.getSession().removeAttribute(ATT_REGISTRATION_CV);
+		regCertsStorage.removeData(request.getSession());
+		regCvStorage.removeData(request.getSession());
 	}
 
 }

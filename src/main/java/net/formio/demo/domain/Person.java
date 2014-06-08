@@ -17,7 +17,7 @@ public class Person implements Serializable {
 	
 	private final String firstName;
 
-	@Size(min = 2)
+	@NotEmpty
 	private final String lastName;
 
 	@Min(value=8000, payload=SeverityPayload.Warning.class)

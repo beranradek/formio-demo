@@ -3,10 +3,11 @@
 <jsp:include page="header.jsp" />
 <c:set var="bundleName" value="net.formio.demo.domain.Registration" />
 <fmt:bundle basename="${bundleName}">
-<h1>Formio demo</h1>
+
 <ul class="nav nav-tabs">
   <li><a href="<c:url value="/simple.html"/>">Simple</a></li>
   <li class="active"><a href="#">Advanced</a></li>
+  <%-- <li><a href="<c:url value="/ajax.html"/>">AJAX Form</a></li> --%>
 </ul>
 
 <c:if test="${not empty success}">

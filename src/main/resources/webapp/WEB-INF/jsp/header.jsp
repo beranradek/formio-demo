@@ -62,3 +62,6 @@
 </head>
 <body>
 <div class="container">
+<div class="home-link"><a href="http://www.formio.net/">Formio Home</a></div>
+<h1>Formio Demo</h1>
+

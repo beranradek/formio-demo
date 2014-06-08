@@ -13,10 +13,10 @@
 	});
 </script>
 
-<h1>Formio demo</h1>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#">Simple</a></li>
-  <li><a href="advanced.html">Advanced</a></li>
+  <li><a href="<c:url value="/advanced.html"/>">Advanced</a></li>
+  <%-- <li><a href="<c:url value="/ajax.html"/>">AJAX Form</a></li> --%>
 </ul>
 
 <p style="margin:0.5em">Welcome in formio demo application.</p>
