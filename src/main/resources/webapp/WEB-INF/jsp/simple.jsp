@@ -1,3 +1,4 @@
+<%@page contentType="text/html; charset=UTF-8" %>
 <%@page pageEncoding="UTF-8" %>
 <%@include file="include.jsp" %>
 <jsp:include page="header.jsp" />
@@ -13,13 +14,11 @@
 	});
 </script>
 
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#">Simple</a></li>
-  <li><a href="<c:url value="/advanced.html"/>">Advanced</a></li>
-  <%-- <li><a href="<c:url value="/ajax.html"/>">AJAX Form</a></li> --%>
-</ul>
+<jsp:include page="navigation.jsp">
+	<jsp:param name="activeTab" value="simple"/>
+</jsp:include>
 
-<p style="margin:0.5em">Welcome in formio demo application.</p>
+<p style="margin:0.5em">Welcome in Formio demo application.</p>
 
 <c:if test="${not empty success}">
 	<div class="alert alert-success">Data successfully saved.</div>

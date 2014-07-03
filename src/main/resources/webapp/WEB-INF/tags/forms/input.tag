@@ -11,6 +11,7 @@
 <%@attribute name="multi" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="withoutLabel" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="inputCss" required="false" rtexprvalue="true" type="String" %>
+<%@attribute name="inputWrapperCss" required="false" rtexprvalue="true" type="String" %>
 <%@attribute name="postfix" required="false" rtexprvalue="true" type="java.lang.Object" %>
 <%@attribute name="localize" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="itemId" required="false" rtexprvalue="true" type="java.lang.Object" %>
@@ -23,7 +24,7 @@
 		<c:set var="field" value="${fields[fieldName]}" />
 		<c:set var="maxSev" value="${myfn:maxSeverity(fieldMsgs[field.name])}"/>
 		<div class="form-group compact<c:if test="${not empty maxSev}"> has-${maxSev}</c:if>">
-			<div class="col-sm-offset-2 col-sm-4">
+			<div class="<c:choose><c:when test="${not empty inputWrapperCss}">${inputWrapperCss}</c:when><c:otherwise>col-sm-offset-2 col-sm-4</c:otherwise></c:choose>">
 				<div class="checkbox">
 					<c:if test="${not withoutLabel}">
 						<label>
@@ -43,7 +44,7 @@
 	<c:when test="${type == 'checkbox' || type == 'radio'}">
 		<c:set var="maxSev" value="${myfn:maxSeverity(fieldMsgs[field.name])}"/>
 		<div class="form-group<c:if test="${not empty maxSev}"> has-${maxSev}</c:if>">
-			<div class="col-sm-offset-2 col-sm-4">
+			<div class="<c:choose><c:when test="${not empty inputWrapperCss}">${inputWrapperCss}</c:when><c:otherwise>col-sm-offset-2 col-sm-4</c:otherwise></c:choose>">
 				<div class="checkbox">
 					<c:if test="${not withoutLabel}">
 						<label>
@@ -68,7 +69,7 @@
 			<c:if test="${not withoutLabel}">
 				<label class="control-label col-sm-2" for="id-${field.name}"><fmt:message key="${field.labelKey}"/><c:if test="${field.required}">&nbsp;*</c:if>:</label>
 			</c:if>
-			<div class="col-sm-4">
+			<div class="<c:choose><c:when test="${not empty inputWrapperCss}">${inputWrapperCss}</c:when><c:otherwise>col-sm-4</c:otherwise></c:choose>">
 				<select class="input-sm form-control" name="${field.name}" id="id-${field.name}">
 					<c:forEach var="item" items="${items}">
 						<option value="${item.key}"<c:if test="${field.value == item.key}"> selected="selected"</c:if>><fmt:message key="${item.value}"/></option>
@@ -87,7 +88,7 @@
 			<c:if test="${not withoutLabel && type != 'hidden'}">
 				<label class="control-label col-sm-2" for="id-${field.name}<c:if test="${multi}">[]</c:if>"><fmt:message key="${field.labelKey}"/><c:if test="${field.required}">&nbsp;*</c:if>:</label>
 			</c:if>
-			<div class="<c:if test="${withoutLabel}">col-sm-offset-2 </c:if>col-sm-4">
+			<div class="<c:choose><c:when test="${not empty inputWrapperCss}">${inputWrapperCss}</c:when><c:otherwise><c:if test="${withoutLabel}">col-sm-offset-2 </c:if>col-sm-4</c:otherwise></c:choose>">
 				<c:choose>
 					<c:when test="${type == 'textarea'}">
 						<textarea class="input-sm form-control<c:if test="${not empty inputCss}"> ${inputCss}</c:if>" name="${field.name}<c:if test="${multi}">[]</c:if>" id="id-${field.name}<c:if test="${multi}">[]</c:if>">${field.value}</textarea>

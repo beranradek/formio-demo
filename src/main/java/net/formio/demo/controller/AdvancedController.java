@@ -66,7 +66,8 @@ public class AdvancedController extends AbstractBaseController {
 //		  .build();
 
 	@Override
-	protected void processRequestInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType(HTML_CONTENT_TYPE);
 		RequestParams reqParams = new ServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);

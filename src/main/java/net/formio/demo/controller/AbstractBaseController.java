@@ -35,10 +35,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractBaseController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String ACTION_PREFIX = "action_";
 	
 	protected static final Logger log = LoggerFactory.getLogger(AbstractBaseController.class);
 	protected static final String SUCCESS = "success";
 	protected static final Locale DEFAULT_LOCALE = new Locale("en");
+	protected static final String XML_CONTENT_TYPE = "application/xml; charset=UTF-8";
+	protected static final String HTML_CONTENT_TYPE = "text/html; charset=UTF-8";
+	protected static final String INFUSE_PARAM = "_infuse";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,12 +60,7 @@ public abstract class AbstractBaseController extends HttpServlet {
 		processRequest(request, response);
 	}
 	
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html; charset=UTF-8");
-		processRequestInternal(request, response);
-	}
-	
-	protected abstract void processRequestInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+	protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormMapping<?> filledForm, String pageName) throws ServletException, IOException {
 		request.setAttribute("form", filledForm);
@@ -72,5 +71,30 @@ public abstract class AbstractBaseController extends HttpServlet {
 	protected void redirect(HttpServletRequest request,
 		HttpServletResponse response, String pageName, boolean dataSaved) throws IOException {
 		response.sendRedirect(request.getContextPath() + "/" + pageName + ".html" + (dataSaved ? ("?" + SUCCESS + "=1") : ""));
+	}
+	
+	/**
+	 * Returns name of action parameter after "action_" prefix.
+	 * @param request
+	 * @return
+	 */
+	protected String getAction(HttpServletRequest request) {
+		String action = null;
+		for (String paramName : request.getParameterMap().keySet()) {
+			if (paramName != null && paramName.toLowerCase().startsWith(ACTION_PREFIX)) {
+				action = paramName.substring(ACTION_PREFIX.length());
+				break;
+			}
+		}
+		return action;
+	}
+	
+	/**
+	 * Returns true if given request is AJAX request.
+	 * @param request
+	 * @return
+	 */
+	protected boolean isAjaxRequest(HttpServletRequest request) {
+		return request.getParameter(INFUSE_PARAM) != null;
 	}
 }

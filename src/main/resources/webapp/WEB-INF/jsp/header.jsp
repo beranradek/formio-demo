@@ -1,3 +1,4 @@
+<%@page contentType="text/html; charset=UTF-8" %>
 <%@page pageEncoding="UTF-8" %>
 <%@include file="include.jsp" %>
 <!DOCTYPE html>
@@ -27,6 +28,7 @@
     <script src="${pageContext.request.contextPath}/javascripts/jquery-ui-i18n.js"></script>
     <!-- Bootstrap core JS -->
 	<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/javascripts/tdi-bundle.min-1.7.6.js"></script>
 	
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

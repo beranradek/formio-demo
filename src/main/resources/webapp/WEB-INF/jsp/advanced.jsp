@@ -1,14 +1,13 @@
+<%@page contentType="text/html; charset=UTF-8" %>
 <%@page pageEncoding="UTF-8" %>
 <%@include file="include.jsp" %>
 <jsp:include page="header.jsp" />
 <c:set var="bundleName" value="net.formio.demo.domain.Registration" />
 <fmt:bundle basename="${bundleName}">
 
-<ul class="nav nav-tabs">
-  <li><a href="<c:url value="/simple.html"/>">Simple</a></li>
-  <li class="active"><a href="#">Advanced</a></li>
-  <%-- <li><a href="<c:url value="/ajax.html"/>">AJAX Form</a></li> --%>
-</ul>
+<jsp:include page="navigation.jsp">
+	<jsp:param name="activeTab" value="advanced"/>
+</jsp:include>
 
 <c:if test="${not empty success}">
 	<div class="alert alert-success">Data successfully saved.</div>

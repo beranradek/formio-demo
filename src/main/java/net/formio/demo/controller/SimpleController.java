@@ -35,7 +35,8 @@ public class SimpleController extends AbstractBaseController {
 		.build();	
 
 	@Override
-	protected void processRequestInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType(HTML_CONTENT_TYPE);
 		if (request.getParameter("submitted") != null) {
 			FormData<Person> formData = personForm.bind(new ServletRequestParams(request), DEFAULT_LOCALE);
 			if (formData.isValid()) {

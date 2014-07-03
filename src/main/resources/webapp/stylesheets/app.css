@@ -49,3 +49,7 @@ dd label {
 	font-size: 1.5em;
 	padding-top: 1em;	
 }
+
+.hidden {
+	display:none;	
+}
