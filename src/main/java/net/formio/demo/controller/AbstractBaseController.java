@@ -40,8 +40,6 @@ public abstract class AbstractBaseController extends HttpServlet {
 	protected static final Logger log = LoggerFactory.getLogger(AbstractBaseController.class);
 	protected static final String SUCCESS = "success";
 	protected static final Locale DEFAULT_LOCALE = new Locale("en");
-	protected static final String XML_CONTENT_TYPE = "application/xml; charset=UTF-8";
-	protected static final String HTML_CONTENT_TYPE = "text/html; charset=UTF-8";
 	protected static final String INFUSE_PARAM = "_infuse";
 
 	/**

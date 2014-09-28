@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.formio.ContentTypes;
 import net.formio.FormData;
 import net.formio.FormMapping;
 import net.formio.Forms;
@@ -21,10 +22,10 @@ import net.formio.demo.domain.AttendanceReason;
 import net.formio.demo.domain.Collegue;
 import net.formio.demo.domain.NewCollegue;
 import net.formio.demo.domain.Registration;
-import net.formio.demo.servlet.SessionStorage;
 import net.formio.security.TokenException;
 import net.formio.servlet.ServletRequestContext;
 import net.formio.servlet.ServletRequestParams;
+import net.formio.servlet.SessionAttributeStorage;
 import net.formio.upload.UploadedFile;
 import net.formio.upload.UploadedFileWrapper;
 import net.formio.validation.ValidationResult;
@@ -36,9 +37,9 @@ import net.formio.validation.ValidationResult;
 public class AdvancedController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "advanced";
-	private static final SessionStorage<Registration> regStorage = new SessionStorage<Registration>("registration");
-	private static final SessionStorage<ArrayList<UploadedFileWrapper>> regCertsStorage = new SessionStorage<ArrayList<UploadedFileWrapper>>("registrationCertificates");
-	private static final SessionStorage<UploadedFile> regCvStorage = new SessionStorage<UploadedFile>("registrationCv");
+	private static final SessionAttributeStorage<Registration> regStorage = new SessionAttributeStorage<Registration>("registration");
+	private static final SessionAttributeStorage<ArrayList<UploadedFileWrapper>> regCertsStorage = new SessionAttributeStorage<ArrayList<UploadedFileWrapper>>("registrationCertificates");
+	private static final SessionAttributeStorage<UploadedFile> regCvStorage = new SessionAttributeStorage<UploadedFile>("registrationCv");
 	private static final int MAX_CERTIFICATE_CNT = 3;
 	
 	// immutable definition of the form, can be freely shared/cached
@@ -67,7 +68,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType(HTML_CONTENT_TYPE);
+		response.setContentType(ContentTypes.HTML);
 		RequestParams reqParams = new ServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);
@@ -140,6 +141,7 @@ public class AdvancedController extends AbstractBaseController {
 				renderForm(request, response, formData);
 			}
 		} catch (TokenException ex) {
+			log.warn(ex.getMessage(), ex);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
@@ -219,8 +221,8 @@ public class AdvancedController extends AbstractBaseController {
 				ReadableByteChannel ich = null; // file.getContent();
 				FileOutputStream fos = null;
 				try {
-			    	// fos = new FileOutputStream("C:\\someDir\\" + file.getFileName());
-			    	// fos.getChannel().transferFrom(ich, 0, Long.MAX_VALUE);
+			    	//fos = new FileOutputStream("C:\\someDir\\" + file.getFileName());
+			    	//fos.getChannel().transferFrom(ich, 0, Long.MAX_VALUE);
 					log.info("File " + file.getFileName() + " was successfully processed.");
 			    } finally {
 			    	if (fos != null) fos.close();

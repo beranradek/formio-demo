@@ -9,13 +9,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.formio.ContentTypes;
 import net.formio.FormData;
 import net.formio.FormMapping;
 import net.formio.Forms;
 import net.formio.demo.domain.Nation;
 import net.formio.demo.domain.Person;
-import net.formio.demo.servlet.SessionStorage;
 import net.formio.servlet.ServletRequestParams;
+import net.formio.servlet.SessionAttributeStorage;
 import net.formio.validation.ValidationResult;
 
 /**
@@ -25,7 +26,7 @@ import net.formio.validation.ValidationResult;
 public class SimpleController extends AbstractBaseController {
 	private static final long serialVersionUID = -940571494115484909L;
 	private static final String PAGE_NAME = "simple";
-	private static final SessionStorage<Person> personStorage = new SessionStorage<Person>("person");
+	private static final SessionAttributeStorage<Person> personStorage = new SessionAttributeStorage<Person>("person");
 	
 	// immutable definition of the form, can be freely shared/cached
 	// private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();		
@@ -36,7 +37,7 @@ public class SimpleController extends AbstractBaseController {
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType(HTML_CONTENT_TYPE);
+		response.setContentType(ContentTypes.HTML);
 		if (request.getParameter("submitted") != null) {
 			FormData<Person> formData = personForm.bind(new ServletRequestParams(request), DEFAULT_LOCALE);
 			if (formData.isValid()) {
