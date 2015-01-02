@@ -15,7 +15,6 @@
 </c:if>
 
 <form:globalErrors validationResult="${form.validationResult}"/>
-<c:set var="fieldMsgs" value="${form.validationResult.fieldMessages}" />
 
 <%-- Class tdi invokes AJAX request when the form is submitted. --%>
 <form action="<c:url value="/ajax.html"/>" method="post" class="tdi form-horizontal" role="form">

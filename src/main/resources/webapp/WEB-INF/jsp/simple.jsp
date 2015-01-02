@@ -24,18 +24,17 @@
 	<div class="alert alert-success">Data successfully saved.</div>
 </c:if>
 <form:globalErrors validationResult="${form.validationResult}"/>
-<c:set var="fieldMsgs" value="${form.validationResult.fieldMessages}" />
 
 <form action="<c:url value="/simple.html"/>" method="post" class="form-horizontal" role="form">
-	<form:input type="hidden" fieldName="formAuthToken" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="hidden" fieldName="personId" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="text" fieldName="firstName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="text" fieldName="lastName" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="text" fieldName="salary" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="checkbox" fieldName="male" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="text" fieldName="birthDate" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="text" fieldName="phone" fields="${form.fields}" fieldMsgs="${fieldMsgs}" bundleName="${bundleName}" />
-	<form:input type="select" fieldName="nation" fields="${form.fields}" fieldMsgs="${fieldMsgs}" items="${nationItems}" bundleName="${bundleName}" />
+	<form:input type="hidden" fieldName="formAuthToken" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="hidden" fieldName="personId" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="firstName" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="lastName" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="salary" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="checkbox" fieldName="male" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="birthDate" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="text" fieldName="phone" fields="${form.fields}" bundleName="${bundleName}" />
+	<form:input type="select" fieldName="nation" fields="${form.fields}" items="${nationItems}" bundleName="${bundleName}" />
 	<form:button name="submitted" label="Save" styleClass="btn btn-default btn-primary"/>
 </form>
 

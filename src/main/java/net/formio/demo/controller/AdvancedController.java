@@ -47,24 +47,6 @@ public class AdvancedController extends AbstractBaseController {
 		Forms.automaticSecured(Registration.class, "registration")
 			.nested(Forms.automaticSecured(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance")).build())
 			.build();
-			
-//	private static final FormMapping<RegDate> regDateMapping = Forms.basic(RegDate.class, "regDate").fields("month", "year").build();
-//	private static final FormMapping<Registration> registrationForm =
-//		Forms.basic(Registration.class, "registration")
-//		  // whitelist of properties to bind
-//		  .fields("attendanceReasons", "cv", "interests", "email")
-//		  .nested(Forms.automatic(UploadedFileWrapper.class, "certificates", null, MappingType.LIST).build())
-//		  .nested(Forms.basic(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance"))
-//		    .fields("street", "city", "zipCode").build())
-//		  .nested(Forms.basic(Collegue.class, "collegues", null, MappingType.LIST)
-//		    .fields("name", "email")
-//		    .nested(regDateMapping)
-//		    .build())
-//		  .nested(Forms.basic(NewCollegue.class, "newCollegue")
-//		    .fields("name", "email")
-//		    .nested(regDateMapping)
-//		    .build())
-//		  .build();
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

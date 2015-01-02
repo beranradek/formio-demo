@@ -27,9 +27,10 @@ public class AjaxFormController extends AbstractBaseController {
 	private static final String PAGE_NAME = "ajax";
 	private static final SessionAttributeStorage<UserData> usersStorage = 
 		new SessionAttributeStorage<UserData>(AjaxFormController.class.getSimpleName() + "_userData");
-	private static final String ACTION_ADD_USER = "addUser";
-	private static final String ACTION_REMOVE_USER_PREFIX = "removeUser_";
-	private static final String ACTION_SAVE_CHANGES = "saveChanges";
+	
+	enum Actions {
+		addUser, removeUser_, saveChanges
+	}
 	
 	private static final FormMapping<UserData> usersForm = 
 		Forms.automatic(UserData.class, "userData").build();
@@ -38,18 +39,18 @@ public class AjaxFormController extends AbstractBaseController {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = getAction(request);
 		if (action != null && !action.isEmpty()) {
-			if (action.equals(ACTION_ADD_USER)) {
+			if (action.equals(Actions.addUser.name())) {
 				processAddUser(request, response);
-			} else if (action.startsWith(ACTION_REMOVE_USER_PREFIX)) {
-				int userIndex = Integer.valueOf(action.substring(ACTION_REMOVE_USER_PREFIX.length())).intValue();
+			} else if (action.startsWith(Actions.removeUser_.name())) {
+				int userIndex = Integer.valueOf(action.substring(Actions.removeUser_.name().length())).intValue();
 				processRemoveUser(request, response, userIndex);
-			} else if (action.equals(ACTION_SAVE_CHANGES)) {
+			} else if (action.equals(Actions.saveChanges.name())) {
 				processSaveAllChanges(request, response);
 			} else {
-				// unknown action
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND); // unknown action
 			}
 		} else {
+			// No processing action, just rendering the form
 			FormData<UserData> formData = new FormData<UserData>(findOrCreateUserData(request), ValidationResult.empty);
 			renderWholeForm(request, response, formData);
 		}
@@ -64,7 +65,7 @@ public class AjaxFormController extends AbstractBaseController {
 			if (isAjaxRequest(request)) {
 				FormMapping<UserData> filledForm = usersForm.fill(formData, DEFAULT_LOCALE);
 				FormMapping<User> newUserMapping = filledForm.getNestedByProperty(User.class, "newUser");
-				renderUserAdded(request, response, getUserMappings(filledForm), newUserMapping);
+				renderUpdateUsersNewUser(request, response, getUserMappings(filledForm), newUserMapping);
 			} else {
 				// AJAX (JavaScript) is not available, rendering whole page
 				renderWholeForm(request, response, formData);
@@ -74,7 +75,7 @@ public class AjaxFormController extends AbstractBaseController {
 				// show validation errors, also in this case AJAX response must be rendered
 				FormMapping<UserData> filledForm = usersForm.fill(formData, DEFAULT_LOCALE);
 				FormMapping<User> newUserMapping = filledForm.getNestedByProperty(User.class, "newUser");
-				renderUserAddedInvalid(request, response, newUserMapping);
+				renderUpdateNewUser(request, response, newUserMapping);
 			} else {
 				// AJAX (JavaScript) is not available, rendering whole page
 				renderWholeForm(request, response, formData);
@@ -91,8 +92,8 @@ public class AjaxFormController extends AbstractBaseController {
 				userData.getUsers().remove(userIndex);
 				usersStorage.storeData(request.getSession(), userData);
 				if (isAjaxRequest(request)) {
-					FormMapping<UserData> filledForm = usersForm.fill(formData, DEFAULT_LOCALE, new ServletRequestContext(request));
-					renderUserRemoved(request, response, getUserMappings(filledForm));
+					FormMapping<UserData> filledForm = usersForm.fill(formData, DEFAULT_LOCALE);
+					renderUpdateUsers(request, response, getUserMappings(filledForm));
 				} else {
 					// AJAX (JavaScript) is not available, rendering whole page
 					renderWholeForm(request, response, formData);
@@ -118,7 +119,7 @@ public class AjaxFormController extends AbstractBaseController {
 				FormMapping<UserData> filledForm = usersForm.fill(formData, DEFAULT_LOCALE);
 				FormMapping<User> newUserMapping = filledForm.getNestedByProperty(User.class, "newUser");
 				List<?> userMappings = getUserMappings(filledForm);
-				renderFormInvalid(request, response, userMappings, newUserMapping);
+				renderUpdateUsersNewUser(request, response, userMappings, newUserMapping);
 			} else {
 				renderWholeForm(request, response, formData);
 			}
@@ -132,28 +133,15 @@ public class AjaxFormController extends AbstractBaseController {
 		request.setAttribute("userData", formData.getData());
 		super.renderForm(request, response, filledForm, PAGE_NAME);
 	}
-	
-	/** Render result of AJAX request for saving INVALID whole form (part of page). */
-	private void renderFormInvalid(
-		HttpServletRequest request,
-		HttpServletResponse response, 
-		List<?> userMappings,
-		FormMapping<User> newUserMapping) throws ServletException, IOException {
-		response.setContentType(ContentTypes.XML);
-		request.setAttribute("userMappings", userMappings);
-		request.setAttribute("newUserMapping", newUserMapping);
-		request.getRequestDispatcher("/WEB-INF/jsp/ajax/userFormInvalid.jsp").forward(request, response);
-	}
 
 	/** Render result of AJAX request for saving whole form (part of page). */
-	private void renderFormSuccess(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void renderFormSuccess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType(ContentTypes.XML);
-		request.getRequestDispatcher("/WEB-INF/jsp/ajax/userFormSuccess.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/ajax/redirectToSuccess.jsp").forward(request, response);
 	}
 
-	/** Render result of AJAX request for adding new user (part of page). */
-	private void renderUserAdded(
+	/** Render result of AJAX request (part of page). */
+	private void renderUpdateUsersNewUser(
 		HttpServletRequest request, 
 		HttpServletResponse response, 
 		List<?> userMappings, 
@@ -161,27 +149,27 @@ public class AjaxFormController extends AbstractBaseController {
 		response.setContentType(ContentTypes.XML);
 		request.setAttribute("userMappings", userMappings);
 		request.setAttribute("newUserMapping", newUserMapping);
-		request.getRequestDispatcher("/WEB-INF/jsp/ajax/userAdded.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/ajax/updateUsersNewUser.jsp").forward(request, response);
 	}
 	
-	/** Render result of AJAX request for adding INVALID new user (part of page). */
-	private void renderUserAddedInvalid(
+	/** Render result of AJAX request (part of page). */
+	private void renderUpdateNewUser(
 		HttpServletRequest request, 
 		HttpServletResponse response, 
 		FormMapping<User> newUserMapping) throws ServletException, IOException {
 		response.setContentType(ContentTypes.XML);
 		request.setAttribute("newUserMapping", newUserMapping);
-		request.getRequestDispatcher("/WEB-INF/jsp/ajax/userAddedInvalid.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/ajax/updateNewUser.jsp").forward(request, response);
 	}
 	
 	/** Render result of AJAX request for removing the user. */
-	private void renderUserRemoved(
+	private void renderUpdateUsers(
 		HttpServletRequest request,
 		HttpServletResponse response,  
 		List<?> userMappings) throws ServletException, IOException {
 		response.setContentType(ContentTypes.XML);
 		request.setAttribute("userMappings", userMappings);
-		request.getRequestDispatcher("/WEB-INF/jsp/ajax/userRemoved.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/ajax/updateUsers.jsp").forward(request, response);
 	}
 	
 	private UserData findOrCreateUserData(HttpServletRequest request) {

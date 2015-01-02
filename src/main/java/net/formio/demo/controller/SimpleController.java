@@ -31,7 +31,7 @@ public class SimpleController extends AbstractBaseController {
 	// immutable definition of the form, can be freely shared/cached
 	// private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();		
 	private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
-		// whitelist of properties to bind
+		// whitelist of formProperties to bind
 		.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
 		.build();	
 
