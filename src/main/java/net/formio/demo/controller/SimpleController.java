@@ -1,8 +1,8 @@
 package net.formio.demo.controller;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -56,7 +56,7 @@ public class SimpleController extends AbstractBaseController {
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormData<Person> formData) throws ServletException, IOException {
 		FormMapping<Person> filledForm = personForm.fill(formData, DEFAULT_LOCALE);
-		Map<Nation, String> nationItems = new HashMap<Nation, String>();
+		Map<Nation, String> nationItems = new LinkedHashMap<Nation, String>();
 		for (Nation nation : Nation.values()) {
 			nationItems.put(nation, nation.name()); 
 		}
@@ -73,10 +73,12 @@ public class SimpleController extends AbstractBaseController {
 	}
 	
 	private Person initPerson() {
-		Person aPerson = new Person("Jan", "Novak");
-		aPerson.setBirthDate(new Date());
+		Person aPerson = new Person("Obi-Wan", "Kenobi");
+		Calendar birth = Calendar.getInstance();
+		birth.set(1970, 11, 3);
+		aPerson.setBirthDate(birth.getTime());
 		aPerson.setMale(true);
-		aPerson.setNation(Nation.CZECH);
+		aPerson.setNation(Nation.JEDI_KNIGHT);
 		aPerson.setPersonId(1L);
 		return aPerson;
 	}

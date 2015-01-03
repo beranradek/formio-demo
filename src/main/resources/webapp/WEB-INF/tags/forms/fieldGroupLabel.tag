@@ -1,6 +1,6 @@
 <%@include file="/WEB-INF/jsp/include.jsp" %>
 <%@attribute name="formField" required="true" rtexprvalue="true" type="net.formio.FormField" %>
-<%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
+<%@attribute name="bundleName" required="false" rtexprvalue="true" type="String" %>
 
 <fmt:bundle basename="${bundleName}">
 <c:set var="maxSev" value="${myfn:maxSeverity(formField.validationMessages)}"/>

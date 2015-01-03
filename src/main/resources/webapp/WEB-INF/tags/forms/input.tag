@@ -2,7 +2,7 @@
 <%@attribute name="fields" required="true" rtexprvalue="true" type="java.util.Map" %>
 <%@attribute name="fieldName" required="true" rtexprvalue="true" type="String" %>
 <%@attribute name="type" required="true" rtexprvalue="true" %>
-<%@attribute name="bundleName" required="true" rtexprvalue="true" type="String" %>
+<%@attribute name="bundleName" required="false" rtexprvalue="true" type="String" %>
 <%@attribute name="items" required="false" rtexprvalue="true" type="java.util.Map" %>
 <%@attribute name="withoutLabel" required="false" rtexprvalue="true" type="java.lang.Boolean" %>
 <%@attribute name="inputCss" required="false" rtexprvalue="true" type="String" %>
