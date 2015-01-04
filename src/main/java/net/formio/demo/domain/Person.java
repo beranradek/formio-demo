@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import net.formio.binding.ArgumentName;
 import net.formio.validation.SeverityPayload;
