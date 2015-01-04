@@ -54,7 +54,7 @@ public class AdvancedController extends AbstractBaseController {
 		RequestParams reqParams = new ServletRequestParams(request);
 		if (reqParams.getRequestError() != null || reqParams.getParamValue("submitted") != null) {
 			processFormSubmission(request, response, reqParams);
-		} else if (reqParams.getRequestError() != null || reqParams.getParamValue("newCollegue") != null) {
+		} else if (reqParams.getParamValue("newCollegue") != null) {
 			processNewCollegue(request, response, reqParams);
 		} else if (reqParams.getParamValue("removeCollegue") != null) {
 			processRemoveCollegue(request, response, reqParams);
@@ -63,8 +63,7 @@ public class AdvancedController extends AbstractBaseController {
 		} else {
 			// no submission, loading currently stored data to show it in the form
 			// log.info(registrationForm + "\n");
-			Registration reg = findRegistration(request);
-			FormData<Registration> formData = new FormData<Registration>(reg, ValidationResult.empty);
+			FormData<Registration> formData = new FormData<Registration>(findRegistration(request), ValidationResult.empty);
 			renderForm(request, response, formData);
 		}
 	}

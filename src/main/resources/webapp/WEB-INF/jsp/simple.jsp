@@ -10,7 +10,6 @@
 		$.datepicker.setDefaults(
 		  $.extend($.datepicker.regional[''])
 		);
-		$('#id-person-birthDate').datepicker({ dateFormat: "d.m.yy" });
 	});
 </script>
 
@@ -33,6 +32,11 @@
 	<form:input type="text" fieldName="salary" fields="${form.fields}" />
 	<form:input type="checkbox" fieldName="male" fields="${form.fields}" />
 	<form:input type="text" fieldName="birthDate" fields="${form.fields}" />
+	<script>
+		$(function(){
+			$('#id-person-birthDate').datepicker({ dateFormat: "d.m.yy" });
+		});
+	</script>
 	<form:input type="text" fieldName="phone" fields="${form.fields}" />
 	<form:input type="select" fieldName="nation" fields="${form.fields}" items="${nationItems}" />
 	<form:button name="submitted" label="Save" styleClass="btn btn-default btn-primary"/>

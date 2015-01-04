@@ -21,7 +21,7 @@ dependencies {
 	def slf4jVersion = '1.7.5';
     // def jettyVersion = '9.0.2.v20130417'; // for Java 7
     def jettyVersion = '8.1.14.v20131031';
-    def formioVersion = '1.1.3';
+    def formioVersion = '1.3.0';
 
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
     compile "org.eclipse.jetty.aggregate:jetty-server:${jettyVersion}"
