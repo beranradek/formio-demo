@@ -1,16 +1,25 @@
 apply plugin: 'eclipse'
-// apply plugin: 'war'
-apply plugin:'java' // for heroku deployment
-apply plugin:'application' // for heroku deployment
+apply plugin: 'eclipse-wtp'
+apply plugin: 'war'    
+apply plugin: 'java' // for heroku deployment
+apply plugin: 'application' // for heroku deployment
 
-mainClassName = "net.formio.demo.HttpServer"
 applicationName = "formio-demo"
+mainClassName = "net.formio.demo.HttpServer" // for heroku deployment
+webAppDirName = "src/main/resources/webapp"
+
+// war {
+//   from('src/main/java') {
+//     into 'WEB-INF/classes'
+//   }
+// }
 
 version = '1.1'
 group = 'net.formio.demo'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
 
 // Bez takto urceneho repositare resolvovani interni ivy knihovnou gradlu nefunguje: 
 repositories {
@@ -35,7 +44,7 @@ dependencies {
     compile "org.hibernate:hibernate-validator:5.1.0.Final"
     compile "net.formio:formio:${formioVersion}"
 
-	testCompile 'junit:junit:4.8.2'
+    testCompile 'junit:junit:4.8.2'
 
     runtime 'ch.qos.logback:logback-classic:1.0.11'
     runtime 'ch.qos.logback:logback-core:1.0.11'
