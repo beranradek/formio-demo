@@ -53,13 +53,10 @@ public class DynamicFormController extends AbstractBaseController {
 		FormMapping<Car> filledForm = carForm.definition(carForm.getFormStateHandler().findFormState(params)).fill(formData);
 		request.setAttribute("formMarkup", carForm.getFormRenderer().renderElement(filledForm));
 		
-		FormMapping<Accessories> filledAddAccessoriesForm = carForm.addAccessoriesForm.fill(new FormData<Accessories>(newAccessories()));
+		FormMapping<Accessories> filledAddAccessoriesForm = carForm.addAccessoriesForm.fill(new FormData<Accessories>(
+			carForm.getCarService().createNewAccessories()));
 		request.setAttribute("addAccessoriesForm", carForm.getFormRenderer().renderElement(filledAddAccessoriesForm));
 		
 		super.renderForm(request, response, filledForm, PAGE_NAME);
-	}
-	
-	private Accessories newAccessories() {
-		return new Accessories(null, 0);
 	}
 }

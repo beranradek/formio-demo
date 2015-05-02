@@ -124,6 +124,10 @@ public class CarForm {
 		return formStateHandler;
 	}
 	
+	public CarService getCarService() {
+		return carService;
+	}
+	
 	/** Process AJAX request: Updating selected brand on the server. */
 	private AjaxAction<Car> brandChanged() {
 		return new FormStateAjaxAction<Car>(formStateHandler) {
