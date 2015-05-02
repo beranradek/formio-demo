@@ -14,6 +14,7 @@ dist
 /RUNNING_PID
 /work
 .sc
+/hs_err_pid*
 
 # SBT
 boot/
