@@ -53,3 +53,18 @@ dd label {
 .hidden {
 	display:none;	
 }
+
+.tdi.loading {
+	/*
+	position: absolute;
+	background-image: url("../images/loading.gif");
+	background-repeat: no-repeat;
+	z-index: 999;
+	height: 16px;
+	width: 16px;
+	overflow: show;
+	top: 40%;
+    left: 50%;
+    */
+
+}

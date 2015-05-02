@@ -15,9 +15,9 @@ import net.formio.FormMapping;
 import net.formio.Forms;
 import net.formio.demo.domain.Nation;
 import net.formio.demo.domain.Person;
+import net.formio.demo.forms.FormConstants;
 import net.formio.servlet.ServletRequestParams;
-import net.formio.servlet.SessionAttributeStorage;
-import net.formio.validation.ValidationResult;
+import net.formio.servlet.common.SessionAttributeStorage;
 
 /**
  * Simple person editing form controller.
@@ -39,7 +39,7 @@ public class SimpleController extends AbstractBaseController {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType(ContentTypes.HTML);
 		if (request.getParameter("submitted") != null) {
-			FormData<Person> formData = personForm.bind(new ServletRequestParams(request), DEFAULT_LOCALE);
+			FormData<Person> formData = personForm.bind(new ServletRequestParams(request), FormConstants.DEFAULT_LOCALE);
 			if (formData.isValid()) {
 				personStorage.storeData(request.getSession(), formData.getData());
 				redirect(request, response, PAGE_NAME, true);
@@ -49,13 +49,13 @@ public class SimpleController extends AbstractBaseController {
 			}
 		} else {
 			// loading currently stored data to show it in the form
-			FormData<Person> formData = new FormData<Person>(findOrCreatePerson(request), ValidationResult.empty);
+			FormData<Person> formData = new FormData<Person>(findOrCreatePerson(request));
 			renderForm(request, response, formData);
 		}
 	}
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormData<Person> formData) throws ServletException, IOException {
-		FormMapping<Person> filledForm = personForm.fill(formData, DEFAULT_LOCALE);
+		FormMapping<Person> filledForm = personForm.fill(formData, FormConstants.DEFAULT_LOCALE);
 		Map<Nation, String> nationItems = new LinkedHashMap<Nation, String>();
 		for (Nation nation : Nation.values()) {
 			nationItems.put(nation, nation.name()); 

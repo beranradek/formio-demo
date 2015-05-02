@@ -61,6 +61,10 @@
   	<servlet-name>AjaxFormController</servlet-name>
   	<servlet-class>net.formio.demo.controller.AjaxFormController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>DynamicFormController</servlet-name>
+  	<servlet-class>net.formio.demo.controller.DynamicFormController</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>SimpleController</servlet-name>
   	<url-pattern>/simple.html</url-pattern>
@@ -72,5 +76,9 @@
   <servlet-mapping>
   	<servlet-name>AjaxFormController</servlet-name>
   	<url-pattern>/ajax.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DynamicFormController</servlet-name>
+  	<url-pattern>/dynamic.html</url-pattern>
   </servlet-mapping>
 </web-app>

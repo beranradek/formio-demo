@@ -22,13 +22,13 @@ import net.formio.demo.domain.AttendanceReason;
 import net.formio.demo.domain.Collegue;
 import net.formio.demo.domain.NewCollegue;
 import net.formio.demo.domain.Registration;
+import net.formio.demo.forms.FormConstants;
 import net.formio.security.TokenException;
 import net.formio.servlet.ServletRequestContext;
 import net.formio.servlet.ServletRequestParams;
-import net.formio.servlet.SessionAttributeStorage;
+import net.formio.servlet.common.SessionAttributeStorage;
 import net.formio.upload.UploadedFile;
 import net.formio.upload.UploadedFileWrapper;
-import net.formio.validation.ValidationResult;
 
 /**
  * Advanced registration editing form controller.
@@ -63,7 +63,7 @@ public class AdvancedController extends AbstractBaseController {
 		} else {
 			// no submission, loading currently stored data to show it in the form
 			// log.info(registrationForm + "\n");
-			FormData<Registration> formData = new FormData<Registration>(findRegistration(request), ValidationResult.empty);
+			FormData<Registration> formData = new FormData<Registration>(findRegistration(request));
 			renderForm(request, response, formData);
 		}
 	}
@@ -90,7 +90,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
-		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, DEFAULT_LOCALE, NewCollegue.New.class);
+		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
 			Registration reg = newCollegueFormData.getData();
 			updateWithRememberedFiles(request, reg);
@@ -111,7 +111,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		try {
-			FormData<Registration> formData = registrationForm.bind(reqParams, DEFAULT_LOCALE); // shown form data updated from request right here
+			FormData<Registration> formData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE); // shown form data updated from request right here
 			if (formData.isValid()) {
 				saveRegistration(request, formData.getData());
 				redirect(request, response, PAGE_NAME, true);
@@ -131,7 +131,7 @@ public class AdvancedController extends AbstractBaseController {
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
 		log.info(registrationForm + "\n");
-		FormMapping<Registration> filledForm = registrationForm.fill(formData, DEFAULT_LOCALE, new ServletRequestContext(request));
+		FormMapping<Registration> filledForm = registrationForm.fill(formData, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request));
 		log.info(filledForm + "\n");
 		
 		// Passing form to the template

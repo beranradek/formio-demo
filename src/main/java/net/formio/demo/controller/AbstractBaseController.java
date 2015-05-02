@@ -17,7 +17,6 @@
 package net.formio.demo.controller;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.formio.FormMapping;
+import net.formio.demo.forms.FormConstants;
+import net.formio.render.BasicFormRenderer;
+import net.formio.render.RenderContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +37,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractBaseController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String ACTION_PREFIX = "action_";
 	
 	protected static final Logger log = LoggerFactory.getLogger(AbstractBaseController.class);
-	protected static final String SUCCESS = "success";
-	protected static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-	protected static final String INFUSE_PARAM = "_infuse";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -62,13 +60,13 @@ public abstract class AbstractBaseController extends HttpServlet {
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormMapping<?> filledForm, String pageName) throws ServletException, IOException {
 		request.setAttribute("form", filledForm);
-		if (request.getParameter(SUCCESS) != null) request.setAttribute(SUCCESS, "1");
+		if (request.getParameter(FormConstants.SUCCESS) != null) request.setAttribute(FormConstants.SUCCESS, "1");
 		request.getRequestDispatcher("/WEB-INF/jsp/" + pageName + ".jsp").forward(request, response);
 	}
 	
 	protected void redirect(HttpServletRequest request,
 		HttpServletResponse response, String pageName, boolean dataSaved) throws IOException {
-		response.sendRedirect(request.getContextPath() + "/" + pageName + ".html" + (dataSaved ? ("?" + SUCCESS + "=1") : ""));
+		response.sendRedirect(request.getContextPath() + "/" + pageName + ".html" + (dataSaved ? ("?" + FormConstants.SUCCESS + "=1") : ""));
 	}
 	
 	/**
@@ -79,8 +77,8 @@ public abstract class AbstractBaseController extends HttpServlet {
 	protected String getAction(HttpServletRequest request) {
 		String action = null;
 		for (String paramName : request.getParameterMap().keySet()) {
-			if (paramName != null && paramName.toLowerCase().startsWith(ACTION_PREFIX)) {
-				action = paramName.substring(ACTION_PREFIX.length());
+			if (paramName != null && paramName.toLowerCase().startsWith(FormConstants.ACTION_PREFIX)) {
+				action = paramName.substring(FormConstants.ACTION_PREFIX.length());
 				break;
 			}
 		}
@@ -88,11 +86,10 @@ public abstract class AbstractBaseController extends HttpServlet {
 	}
 	
 	/**
-	 * Returns true if given request is AJAX request.
-	 * @param request
+	 * Creates form markup renderer.
 	 * @return
 	 */
-	protected boolean isAjaxRequest(HttpServletRequest request) {
-		return request.getParameter(INFUSE_PARAM) != null;
+	protected BasicFormRenderer createRenderer() {
+		return new BasicFormRenderer(new RenderContext(FormConstants.DEFAULT_LOCALE));
 	}
 }
