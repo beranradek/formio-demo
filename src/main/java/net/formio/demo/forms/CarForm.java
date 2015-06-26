@@ -16,6 +16,7 @@
  */
 package net.formio.demo.forms;
 
+import java.util.List;
 import java.util.Locale;
 
 import net.formio.AbstractRequestParams;
@@ -30,7 +31,7 @@ import net.formio.ajax.JsEvent;
 import net.formio.ajax.action.AjaxAction;
 import net.formio.ajax.action.FormStateAjaxAction;
 import net.formio.ajax.action.JsEventToAction;
-import net.formio.data.FormStateHandler;
+import net.formio.ajax.error.AjaxAlertErrorHandler;
 import net.formio.demo.controller.CarFormStateHandler;
 import net.formio.demo.domain.car.Accessories;
 import net.formio.demo.domain.car.Car;
@@ -39,9 +40,12 @@ import net.formio.demo.domain.car.CarModel;
 import net.formio.demo.domain.car.Engine;
 import net.formio.demo.service.CarService;
 import net.formio.demo.utils.Sleeper;
+import net.formio.props.types.InlinePosition;
 import net.formio.render.BasicFormRenderer;
 import net.formio.render.RenderContext;
-import net.formio.render.TdiResponseBuilder;
+import net.formio.render.tdi.InsertionPosition;
+import net.formio.render.tdi.TdiResponseBuilder;
+import net.formio.validation.validators.WholeNumberValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,20 +62,20 @@ public class CarForm {
 	private final String urlBase;
 	private final CarService carService;
 	private final BasicFormRenderer formRenderer;
-	private final FormStateHandler<Car> formStateHandler;
+	private final CarFormStateHandler formStateHandler;
 	
 	public CarForm(String urlBase) {
 		this.urlBase = urlBase;
 		this.carService = new CarService();
+		this.formStateHandler = new CarFormStateHandler(new AjaxAlertErrorHandler<Car>(), carService, log);
 		this.formRenderer = new BasicFormRenderer(new RenderContext(FormConstants.DEFAULT_LOCALE));
-		this.formStateHandler = new CarFormStateHandler(carService, log);
 	}
 	
 	/** Returns form definition based on current form state. */
 	public FormMapping<Car> definition(final Car formState) {
 		return Forms.basic(Car.class, "carForm")
 			.dataAjaxActions(new JsEventToAction[] {
-				new JsEventToAction<Car>("addAccessories", addAccessories()),
+				new JsEventToAction<Car>("addAccessoriesForm-addAccessories", addAccessories()),
 				new JsEventToAction<Car>("save", saveAllChanges()) 
 			})
 			.field("carId", Field.HIDDEN)
@@ -96,31 +100,43 @@ public class CarForm {
 				.dataAjaxActions(new JsEventToAction<Car>(engineDetailsCheckChanged())))
 			.nested(Forms.basic(Engine.class, "engine")
 				.visible(formState.isWithEngineDetails())
-				.field(Forms.field("cylinderCount")
+				.field(Forms.<Integer>field("cylinderCount")
+					.colInputWidth(2)
 					.required(true)
+					.validator(WholeNumberValidator.<Integer>range(2, 8))
 					.dataAjaxActions(new JsEventToAction<Car>(JsEvent.BLUR, refreshErrors())))	
 				.field(Forms.field("volume")
+					.colInputWidth(2)
 					.required(true)
 					.dataAjaxActions(new JsEventToAction<Car>(JsEvent.BLUR, refreshErrors())))
 				.build())
 			.nested(Forms.basic(Accessories.class, "accessoriesList", MappingType.LIST)
 				.field(Forms.field("name").required(true))
-				.field(Forms.field("quantity").required(true))
+				.field(Forms.field("quantity")
+					.required(true)
+					.inline(InlinePosition.FIRST)
+					.colInputWidth(2))
+				.field(Forms.field("removeAccessoriesUrl", Field.LINK)
+					.detached(true)
+					.dataAjaxActions(new JsEventToAction<Car>(removeAccessories()))
+					.confirmMessage("Do you really want to remove the accessories?")
+					.inline(InlinePosition.LAST))
 				.build())
 			.build(Forms.config().locale(FORM_LOCALE).urlBase(urlBase).build());
 	}
 	
 	public final FormMapping<Accessories> addAccessoriesForm =
 		Forms.basic(Accessories.class, "addAccessoriesForm").fields(
-			Forms.field("name").placeholder("Name of accessories"), 
-			Forms.field("quantity"))
+			Forms.field("name").placeholder("Name of accessories").colInputWidth(2).inline(InlinePosition.FIRST), 
+			Forms.field("quantity").labelVisible(false).placeholder("Qty").colLabelWidth(1).colInputWidth(1).inline(InlinePosition.INNER),
+			Forms.field("addAccessories", Field.BUTTON).detached(true).colInputWidth(1).inline(InlinePosition.LAST))
 			.build(Forms.config().locale(FORM_LOCALE).build());
 	
 	public BasicFormRenderer getFormRenderer() {
 		return formRenderer;
 	}
 	
-	public FormStateHandler<Car> getFormStateHandler() {
+	public CarFormStateHandler getFormStateHandler() {
 		return formStateHandler;
 	}
 	
@@ -197,6 +213,8 @@ public class CarForm {
 					formState.updateWith(formData.getData());
 					// Simulate longer saving by some sleep
 					Sleeper.sleep(1000);
+					// Delete form data from session if desired
+					// formStateHandler.deleteFormState(requestParams);
 					// Causes standard redirect, but via AJAX response (we are serving AJAX request) 
 					rb.redirect(urlBase + "?" + FormConstants.SUCCESS + "=1");
 				} else {
@@ -214,15 +232,42 @@ public class CarForm {
 			@Override
 			public AjaxResponse<Car> applyToState(AbstractRequestParams requestParams, Car formState) {
 				FormData<Accessories> formData = addAccessoriesForm.bind(requestParams);
+				TdiResponseBuilder rb = formRenderer.ajaxResponse();
 				if (formData.isValid()) {
 					Accessories accessories = formData.getData();
 					formState.getAccessoriesList().add(accessories);
 					formData = new FormData<Accessories>(carService.createNewAccessories());
+					int newListSize = formState.getAccessoriesList().size();
+					FormMapping<Car> filledForm = definition(formState).fill(new FormData<Car>(formState));
+					List<FormMapping<Accessories>> accessoriesMappings = filledForm.getMapping(Accessories.class, "accessoriesList").getList();
+					rb.insert(InsertionPosition.BEFORE, "carForm-accessoriesList-end",
+						accessoriesMappings.get(newListSize - 1))
+						.update("carForm-accessoriesList-size", "" + newListSize);
 				}
+				return new AjaxResponse<Car>(rb.update(addAccessoriesForm.fill(formData)).asString(), formState);
+			}
+		};
+	}
+	
+	/** Process AJAX request: Remove car accessories from the model. */
+	private AjaxAction<Car> removeAccessories() {
+		return new FormStateAjaxAction<Car>(formStateHandler) {
+			@Override
+			public AjaxResponse<Car> applyToState(AbstractRequestParams requestParams, Car formState) {
 				FormMapping<Car> filledForm = definition(formState).fill(new FormData<Car>(formState));
-				TdiResponseBuilder rb = formRenderer.ajaxResponse();
-				return new AjaxResponse<Car>(rb.update(filledForm.getMapping(Accessories.class, "accessoriesList"))
-					.update(addAccessoriesForm.fill(formData)).asString(), formState);
+				FormElement<Object> srcLink = filledForm.findElement(requestParams.getTdiAjaxSrcElementName());
+				if (srcLink != null) {
+					if (srcLink.getParent().getIndex() != null) {
+						// Change state - remove accessories with given index
+						formState.getAccessoriesList().remove(srcLink.getParent().getIndex().intValue());
+					}
+					filledForm = definition(formState).fill(new FormData<Car>(formState));
+					TdiResponseBuilder rb = formRenderer.ajaxResponse();
+					return new AjaxResponse<Car>(rb.update(filledForm.getMapping(Accessories.class, "accessoriesList")).asString(), 
+						formState);
+				}
+				log.error("Form element with AJAX action not found for " + requestParams.getTdiAjaxSrcElementName());
+				return formStateHandler.errorResponse(requestParams, null);
 			}
 		};
 	}

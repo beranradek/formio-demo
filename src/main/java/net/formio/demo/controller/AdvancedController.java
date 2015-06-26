@@ -111,7 +111,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		try {
-			FormData<Registration> formData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE); // shown form data updated from request right here
+			FormData<Registration> formData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request)); 
 			if (formData.isValid()) {
 				saveRegistration(request, formData.getData());
 				redirect(request, response, PAGE_NAME, true);

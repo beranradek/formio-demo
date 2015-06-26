@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.formio.upload.UploadedFileWrapper;
+
 public class Car implements Serializable {
 	private static final long serialVersionUID = -4971576602203269772L;
 
@@ -37,13 +39,16 @@ public class Car implements Serializable {
 	
 	private List<Accessories> accessoriesList;
 	
+	private List<UploadedFileWrapper> attachments;
+	
 	public void updateWith(Car car) {
 		this.setCarId(car.getCarId());
 		this.setBrand(car.getBrand());
 		this.setModel(car.getModel());
 		this.setWithEngineDetails(car.isWithEngineDetails());
 		this.setEngine(car.getEngine());
-		this.setAccessoriesList(new ArrayList<Accessories>(car.getAccessoriesList()));
+		this.setAccessoriesList(car.getAccessoriesList() != null ? new ArrayList<Accessories>(car.getAccessoriesList()) : new ArrayList<Accessories>());
+		this.setAttachments(car.getAttachments() != null ? new ArrayList<UploadedFileWrapper>(car.getAttachments()) : new ArrayList<UploadedFileWrapper>());
 		this.setColor(car.getColor());
 	}
 
@@ -101,6 +106,14 @@ public class Car implements Serializable {
 
 	public void setAccessoriesList(List<Accessories> accessoriesList) {
 		this.accessoriesList = accessoriesList;
+	}
+
+	public List<UploadedFileWrapper> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(List<UploadedFileWrapper> attachments) {
+		this.attachments = attachments;
 	}
 
 }

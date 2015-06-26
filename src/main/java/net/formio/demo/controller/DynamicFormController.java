@@ -35,13 +35,13 @@ public class DynamicFormController extends AbstractBaseController {
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletRequestParams params = new ServletRequestParams(request);
+		FormData<Car> formData = new FormData<Car>(carForm.getFormStateHandler().findFormState(params));
 		if (params.isTdiAjaxRequest()) {
 			AjaxAction<Car> action = Forms.findAjaxAction(params, 
-				carForm.definition(carForm.getFormStateHandler().findFormState(params)));
-			ServletResponses.ajaxResponse(params, response, action);
+				carForm.definition(carForm.getFormStateHandler().findFormState(params)).fill(formData));
+			ServletResponses.ajaxResponse(params, response, action, carForm.getFormStateHandler());
 		} else {
 			// No (AJAX) action to process, just rendering the whole form
-			FormData<Car> formData = new FormData<Car>(carForm.getFormStateHandler().findFormState(params));
 			renderWholeForm(request, response, formData);
 		}
 	}

@@ -29,9 +29,9 @@ public final class Accessories {
 	@NotEmpty
 	private final String name;
 	@Min(value=1)
-	private final int quantity;
+	private final Integer quantity;
 	
-	public Accessories(@ArgumentName("name") String name, @ArgumentName("quantity") int quantity) {
+	public Accessories(@ArgumentName("name") String name, @ArgumentName("quantity") Integer quantity) {
 		this.name = name;
 		this.quantity = quantity;
 	}
@@ -40,7 +40,7 @@ public final class Accessories {
 		return name;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 }

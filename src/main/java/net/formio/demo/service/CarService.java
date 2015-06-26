@@ -27,6 +27,7 @@ import net.formio.demo.domain.car.Car;
 import net.formio.demo.domain.car.CarBrand;
 import net.formio.demo.domain.car.CarModel;
 import net.formio.demo.domain.car.Engine;
+import net.formio.upload.UploadedFileWrapper;
 
 /**
  * Car operations.
@@ -45,7 +46,7 @@ public class CarService {
 	}
 	
 	public Accessories createNewAccessories() {
-		return new Accessories(null, 0);
+		return new Accessories(null, null);
 	}
 	
 	public Car createNewCar() {
@@ -60,6 +61,9 @@ public class CarService {
 		List<Accessories> accessoriesList = new ArrayList<Accessories>();
 		accessoriesList.add(new Accessories("Wheel Cleaner", 2));
 		car.setAccessoriesList(accessoriesList);
+		List<UploadedFileWrapper> attachments = new ArrayList<UploadedFileWrapper>();
+		attachments.add(new UploadedFileWrapper());
+		car.setAttachments(attachments);
 		return car;
 	}
 	

@@ -25,6 +25,5 @@ import java.util.Locale;
 public class FormConstants {
 	public static final String SUCCESS = "success";
 	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-	public static final String INFUSE_PARAM = "_infuse";
 	public static final String ACTION_PREFIX = "action_";
 }
