@@ -84,10 +84,7 @@ public class CarForm {
 				.choices(carService.findCarBrands())
 				.chooseOptionDisplayed(true) 
 				.chooseOptionTitle("Choose car brand")
-				.dataAjaxActions(new JsEventToAction[] {
-					new JsEventToAction<Car>(JsEvent.BLUR, refreshErrors()),
-					new JsEventToAction<Car>(JsEvent.CHANGE, brandChanged())
-				}))
+				.dataAjaxActions(new JsEventToAction<Car>(JsEvent.CHANGE, brandChanged())))
 			.field(Forms.field("model", Field.DROP_DOWN_CHOICE)
 				.required(true)
 				.choices(carService.findCarModels(formState.getBrand() != null ? formState.getBrand().getId().intValue() : 0))
@@ -160,6 +157,7 @@ public class CarForm {
 				// (field must be filled with current value from AJAX request):
 				// TODO: Provide method findElements that finds all elements with given names
 			    // and throws exception if some is not found
+				
 				return new AjaxResponse<Car>(rb.update(filledCarMapping.getField(CarBrand.class, "brand"))
 					.update(filledCarMapping.getField(CarModel.class, "model"))
 					.focusForName(requestParams.getTdiAjaxSrcElementName()).asString(), formState);
