@@ -7,7 +7,7 @@
 	<jsp:param name="activeTab" value="dynamic"/>
 </jsp:include>
 
-<p style="margin:0.5em">AJAX form powered by Formio &amp; <a href="https://twinstone.org/project/TDI">Twinstone TDI</a>,
+<p style="margin:0.5em">AJAX form powered by Formio &amp; <a href="https://twinstone.org/projects/tdi">Twinstone TDI</a>,
 with automatically generated markup and AJAX actions handled in server side code.</p>
 
 <c:if test="${not empty success}">
