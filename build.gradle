@@ -38,7 +38,6 @@ dependencies {
     compile "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
     compile "org.mortbay.jetty:jsp-2.1-glassfish:9.1.02.B04.p0"
     compile "org.mortbay.jetty:servlet-api:3.0.20100224"
-    // compile "org.eclipse.jetty:jetty-distribution:${jettyVersion}"
     
     compile "javax.servlet:jstl:1.2" // jstl >= 1.2 already contains taglibs
     
