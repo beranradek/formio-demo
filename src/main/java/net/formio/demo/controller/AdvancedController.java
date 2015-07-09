@@ -90,7 +90,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
-		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, NewCollegue.New.class);
+		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request), NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
 			Registration reg = newCollegueFormData.getData();
 			updateWithRememberedFiles(request, reg);
