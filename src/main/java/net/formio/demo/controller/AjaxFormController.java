@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,7 @@ import net.formio.servlet.common.SessionAttributeStorage;
  * AJAX form controller.
  * @author Radek Beran
  */
+@WebServlet(urlPatterns = {"/ajax.html"})
 public class AjaxFormController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "ajax";

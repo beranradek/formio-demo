@@ -5,12 +5,9 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     metadata-complete="false"
     version="3.0">
+  <!-- You can add your servlets annotated with WebServlet annotations to controller package.
+  They will be scanned automatically. -->
     
-  <description>Formio demo</description>
-  <display-name>Formio demo</display-name>
-  <session-config>
-    <session-timeout>30</session-timeout>
-  </session-config>
   <error-page>
     <error-code>404</error-code>
     <location>/WEB-INF/jsp/error_pages/missing.jsp</location>
@@ -27,64 +24,5 @@
     <exception-type>java.lang.RuntimeException</exception-type>
     <location>/WEB-INF/jsp/error_pages/error.jsp</location>
   </error-page>
-  <welcome-file-list>
-    <welcome-file>redirect.jsp</welcome-file>
-  </welcome-file-list>
-  <filter>
-  	<filter-name>CacheFilter</filter-name>
-  	<filter-class>net.formio.demo.filter.StaticResourceCacheFilter</filter-class>
-  </filter>
-  <filter-mapping>
-  	<filter-name>CacheFilter</filter-name>
-  	<url-pattern>/bootstrap/*</url-pattern>
-  	<url-pattern>/javascripts/*</url-pattern>
-  	<url-pattern>/stylesheets/*</url-pattern>
-  </filter-mapping>
-  
-  <servlet>
-    <servlet-name>default</servlet-name>
-    <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
-    <init-param>
-    	<param-name>acceptRanges</param-name>
-    	<param-value>true</param-value>
-	</init-param>
-    <init-param>
-      <param-name>cacheControl</param-name>
-      <param-value>max-age=604800,public</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
 
-  <servlet>
-  	<servlet-name>SimpleController</servlet-name>
-  	<servlet-class>net.formio.demo.controller.SimpleController</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>AdvancedController</servlet-name>
-  	<servlet-class>net.formio.demo.controller.AdvancedController</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>AjaxFormController</servlet-name>
-  	<servlet-class>net.formio.demo.controller.AjaxFormController</servlet-class>
-  </servlet>
-  <servlet>
-  	<servlet-name>DynamicFormController</servlet-name>
-  	<servlet-class>net.formio.demo.controller.DynamicFormController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>SimpleController</servlet-name>
-  	<url-pattern>/simple.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>AdvancedController</servlet-name>
-  	<url-pattern>/advanced.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>AjaxFormController</servlet-name>
-  	<url-pattern>/ajax.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>DynamicFormController</servlet-name>
-  	<url-pattern>/dynamic.html</url-pattern>
-  </servlet-mapping>
 </web-app>

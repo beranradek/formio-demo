@@ -48,6 +48,7 @@ dependencies {
     compile "org.mortbay.jetty:jsp-2.1-glassfish:9.1.02.B04.p0"
     compile "org.mortbay.jetty:servlet-api:3.0.20100224"
     
+    compile "org.reflections:reflections:0.9.10"
     compile "javax.servlet:jstl:1.2" // jstl >= 1.2 already contains taglibs
     
     compile "org.hibernate:hibernate-validator:5.2.0.CR1"

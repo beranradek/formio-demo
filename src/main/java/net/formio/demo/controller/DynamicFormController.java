@@ -3,6 +3,7 @@ package net.formio.demo.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,7 @@ import net.formio.servlet.common.ServletResponses;
  * Dynamic form controller showing AJAX actions including various accessibilities of form elements.
  * @author Radek Beran
  */
+@WebServlet(urlPatterns = {"/dynamic.html"})
 public class DynamicFormController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "dynamic";

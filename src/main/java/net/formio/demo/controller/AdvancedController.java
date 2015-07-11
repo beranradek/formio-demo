@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,6 +35,7 @@ import net.formio.upload.UploadedFileWrapper;
  * Advanced registration editing form controller.
  * @author Radek Beran
  */
+@WebServlet(urlPatterns = {"/advanced.html"})
 public class AdvancedController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "advanced";

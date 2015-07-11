@@ -24,6 +24,7 @@ import net.formio.servlet.common.SessionAttributeStorage;
  * Simple person editing form controller.
  * @author Radek Beran
  */
+@WebServlet(urlPatterns = {"/simple.html"})
 public class SimpleController extends AbstractBaseController {
 	private static final long serialVersionUID = -940571494115484909L;
 	private static final String PAGE_NAME = "simple";
