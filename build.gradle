@@ -8,11 +8,11 @@ applicationName = "formio-demo"
 mainClassName = "net.formio.demo.HttpServer" // for heroku deployment
 webAppDirName = "src/main/resources/webapp"
 
-// war {
+//war {
 //   from('src/main/java') {
 //     into 'WEB-INF/classes'
 //   }
-// }
+//}
 
 version = '1.2'
 group = 'net.formio.demo'
@@ -36,6 +36,15 @@ dependencies {
     compile "org.eclipse.jetty:jetty-server:${jettyVersion}"
     compile "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     compile "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    
+    // For using annotations in Jetty: http://www.eclipse.org/jetty/documentation/current/using-annotations-embedded.html
+    compile "org.eclipse.jetty:jetty-plus:${jettyVersion}"
+    compile "org.eclipse.jetty:jetty-annotations:${jettyVersion}"
+    compile "org.eclipse.jetty.orbit:org.objectweb.asm:3.3.1.v201105211655"
+    
+    // JNDI support using @Resource annotations:
+    compile "org.eclipse.jetty:jetty-jndi:${jettyVersion}"
+    
     compile "org.mortbay.jetty:jsp-2.1-glassfish:9.1.02.B04.p0"
     compile "org.mortbay.jetty:servlet-api:3.0.20100224"
     
