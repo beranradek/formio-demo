@@ -14,7 +14,7 @@ import net.formio.FormMapping;
 import net.formio.Forms;
 import net.formio.demo.domain.User;
 import net.formio.demo.domain.UserData;
-import net.formio.demo.forms.FormConstants;
+import net.formio.format.Location;
 import net.formio.servlet.ServletRequestContext;
 import net.formio.servlet.ServletRequestParams;
 import net.formio.servlet.common.SessionAttributeStorage;
@@ -28,14 +28,14 @@ public class AjaxFormController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "ajax";
 	private static final SessionAttributeStorage<UserData> usersStorage = 
-		new SessionAttributeStorage<UserData>(AjaxFormController.class.getSimpleName() + "_userData");
+		new SessionAttributeStorage<>(AjaxFormController.class.getSimpleName() + "_userData");
 	
 	enum Actions {
 		addUser, removeUser_, saveChanges
 	}
 	
 	private static final FormMapping<UserData> usersForm = 
-		Forms.automatic(UserData.class, "userData").build();
+		Forms.automatic(UserData.class, "userData").build(Location.ENGLISH);
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,7 +53,7 @@ public class AjaxFormController extends AbstractBaseController {
 			}
 		} else {
 			// No processing action, just rendering the form
-			FormData<UserData> formData = new FormData<UserData>(findOrCreateUserData(request));
+			FormData<UserData> formData = new FormData<>(findOrCreateUserData(request));
 			renderWholeForm(request, response, formData);
 		}
 	}
@@ -61,12 +61,12 @@ public class AjaxFormController extends AbstractBaseController {
 	/** Process AJAX request: Adding new user. */
 	protected void processAddUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletRequestParams reqParams = new ServletRequestParams(request);
-		FormData<UserData> formData = usersForm.bind(reqParams, FormConstants.DEFAULT_LOCALE);
+		FormData<UserData> formData = usersForm.bind(reqParams);
 		if (formData.isValid()) {
 			// Append new user and empty the new user data (for adding next user):
 			addAndStoreUser(request, formData.getData()); // modifies formData - adds new user to list
 			if (reqParams.isTdiAjaxRequest()) {
-				FormMapping<UserData> filledForm = usersForm.fill(formData, FormConstants.DEFAULT_LOCALE);
+				FormMapping<UserData> filledForm = usersForm.fill(formData);
 				FormMapping<User> newUserMapping = filledForm.getMapping(User.class, "newUser");
 				renderUpdateUsersNewUser(request, response, getUserMappings(filledForm), newUserMapping);
 			} else {
@@ -76,7 +76,7 @@ public class AjaxFormController extends AbstractBaseController {
 		} else {
 			if (reqParams.isTdiAjaxRequest()) {
 				// show validation errors, also in this case AJAX response must be rendered
-				FormMapping<UserData> filledForm = usersForm.fill(formData, FormConstants.DEFAULT_LOCALE);
+				FormMapping<UserData> filledForm = usersForm.fill(formData);
 				FormMapping<User> newUserMapping = filledForm.getMapping(User.class, "newUser");
 				renderUpdateNewUser(request, response, newUserMapping);
 			} else {
@@ -89,14 +89,14 @@ public class AjaxFormController extends AbstractBaseController {
 	/** Process AJAX request: Removing an user. */
 	protected void processRemoveUser(HttpServletRequest request, HttpServletResponse response, int userIndex) throws ServletException, IOException {
 		ServletRequestParams reqParams = new ServletRequestParams(request);
-		FormData<UserData> formData = usersForm.bind(reqParams, FormConstants.DEFAULT_LOCALE);
+		FormData<UserData> formData = usersForm.bind(reqParams);
 		UserData userData = formData.getData();
 		if (userData != null && userData.getUsers() != null) {
 			if (userIndex >= 0 && userIndex < userData.getUsers().size()) {
 				userData.getUsers().remove(userIndex);
 				usersStorage.storeData(request.getSession(), userData);
 				if (reqParams.isTdiAjaxRequest()) {
-					FormMapping<UserData> filledForm = usersForm.fill(formData, FormConstants.DEFAULT_LOCALE);
+					FormMapping<UserData> filledForm = usersForm.fill(formData);
 					renderUpdateUsers(request, response, getUserMappings(filledForm));
 				} else {
 					// AJAX (JavaScript) is not available, rendering whole page
@@ -109,7 +109,7 @@ public class AjaxFormController extends AbstractBaseController {
 	/** Process AJAX request: Saving whole form. */
 	protected void processSaveAllChanges(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletRequestParams reqParams = new ServletRequestParams(request);
-		FormData<UserData> formData = usersForm.bind(reqParams, FormConstants.DEFAULT_LOCALE);
+		FormData<UserData> formData = usersForm.bind(reqParams);
 		if (formData.isValid()) {
 			usersStorage.storeData(request.getSession(), formData.getData());
 			if (reqParams.isTdiAjaxRequest()) {
@@ -121,7 +121,7 @@ public class AjaxFormController extends AbstractBaseController {
 		} else {
 			// show validation errors
 			if (reqParams.isTdiAjaxRequest()) {
-				FormMapping<UserData> filledForm = usersForm.fill(formData, FormConstants.DEFAULT_LOCALE);
+				FormMapping<UserData> filledForm = usersForm.fill(formData);
 				FormMapping<User> newUserMapping = filledForm.getMapping(User.class, "newUser");
 				List<?> userMappings = getUserMappings(filledForm);
 				renderUpdateUsersNewUser(request, response, userMappings, newUserMapping);
@@ -134,7 +134,7 @@ public class AjaxFormController extends AbstractBaseController {
 	/** Render whole form - non-ajax response (whole page). */
 	private void renderWholeForm(HttpServletRequest request, HttpServletResponse response, FormData<UserData> formData) throws ServletException, IOException {
 		response.setContentType(ContentTypes.HTML);
-		FormMapping<UserData> filledForm = usersForm.fill(formData, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request));
+		FormMapping<UserData> filledForm = usersForm.fill(formData, new ServletRequestContext(request));
 		request.setAttribute("userData", formData.getData());
 		super.renderForm(request, response, filledForm, PAGE_NAME);
 	}

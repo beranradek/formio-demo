@@ -55,7 +55,7 @@ public class UserData implements Serializable {
 	}
 	
 	private void init() {
-		this.users = new ArrayList<User>();
+		this.users = new ArrayList<>();
 		this.newUser = new User();
 	}
 

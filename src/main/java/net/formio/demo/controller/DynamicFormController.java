@@ -37,11 +37,16 @@ public class DynamicFormController extends AbstractBaseController {
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletRequestParams params = new ServletRequestParams(request);
-		FormData<Car> formData = new FormData<Car>(carForm.getFormStateHandler().findFormState(params));
+		Car formState = carForm.getFormStateHandler().findFormState(params);
+		FormData<Car> formData = new FormData<>(formState);
 		if (params.isTdiAjaxRequest()) {
-			AjaxAction<Car> action = Forms.findAjaxAction(params, 
-				carForm.definition(carForm.getFormStateHandler().findFormState(params)).fill(formData));
-			ServletResponses.ajaxResponse(params, response, action, carForm.getFormStateHandler());
+			AjaxAction<Car> action = Forms.findAjaxAction(params, carForm.definition(formState).fill(formData));
+			if (action == null) {
+				// ServletResponses.notFound(response);
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			} else {
+				ServletResponses.ajaxResponse(params, response, action, carForm.getFormStateHandler());
+			}
 		} else {
 			// No (AJAX) action to process, just rendering the whole form
 			renderWholeForm(request, response, formData);
@@ -55,7 +60,7 @@ public class DynamicFormController extends AbstractBaseController {
 		FormMapping<Car> filledForm = carForm.definition(carForm.getFormStateHandler().findFormState(params)).fill(formData);
 		request.setAttribute("formMarkup", carForm.getFormRenderer().renderElement(filledForm));
 		
-		FormMapping<Accessories> filledAddAccessoriesForm = carForm.addAccessoriesForm.fill(new FormData<Accessories>(
+		FormMapping<Accessories> filledAddAccessoriesForm = carForm.addAccessoriesForm.fill(new FormData<>(
 			carForm.getCarService().createNewAccessories()));
 		request.setAttribute("addAccessoriesForm", carForm.getFormRenderer().renderElement(filledAddAccessoriesForm));
 		

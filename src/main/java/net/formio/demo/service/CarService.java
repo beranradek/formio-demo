@@ -38,7 +38,7 @@ public class CarService {
 	private final Map<Integer, List<CarModel>> modelsByBrands;
 	
 	public CarService() {
-		Map<Integer, List<CarModel>> models = new LinkedHashMap<Integer, List<CarModel>>();
+		Map<Integer, List<CarModel>> models = new LinkedHashMap<>();
 		models.put(Integer.valueOf(1), Arrays.asList(new CarModel(1, "RS 4 Avant"), new CarModel(2, "Quattro")));
 		models.put(Integer.valueOf(2), Arrays.asList(new CarModel(50, "Grand Sport"), new CarModel(51, "Veyron")));
 		models.put(Integer.valueOf(3), Arrays.asList(new CarModel(100, "911 Carrera"), new CarModel(101, "918 Spyder")));
@@ -58,17 +58,17 @@ public class CarService {
 		engine.setVolume(null);
 		engine.setCylinderCount(null);
 		car.setEngine(engine);
-		List<Accessories> accessoriesList = new ArrayList<Accessories>();
-		accessoriesList.add(new Accessories("Wheel Cleaner", 2));
+		List<Accessories> accessoriesList = new ArrayList<>();
+		accessoriesList.add(new Accessories("Wheel Cleaner", Integer.valueOf(2)));
 		car.setAccessoriesList(accessoriesList);
-		List<UploadedFileWrapper> attachments = new ArrayList<UploadedFileWrapper>();
+		List<UploadedFileWrapper> attachments = new ArrayList<>();
 		attachments.add(new UploadedFileWrapper());
 		car.setAttachments(attachments);
 		return car;
 	}
 	
 	public List<CarBrand> findCarBrands() {
-		List<CarBrand> brands = new ArrayList<CarBrand>();
+		List<CarBrand> brands = new ArrayList<>();
 		brands.add(new CarBrand(1, "Audi"));
 		brands.add(new CarBrand(2, "Bugatti"));
 		brands.add(new CarBrand(3, "Porsche"));
@@ -78,7 +78,7 @@ public class CarService {
 	public List<CarModel> findCarModels(int brandId) {
 		List<CarModel> models = modelsByBrands.get(Integer.valueOf(brandId));
 		if (models == null) {
-			models = new ArrayList<CarModel>();
+			models = new ArrayList<>();
 		}
 		return models;
 	}

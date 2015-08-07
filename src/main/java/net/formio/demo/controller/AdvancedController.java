@@ -39,16 +39,16 @@ import net.formio.upload.UploadedFileWrapper;
 public class AdvancedController extends AbstractBaseController {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE_NAME = "advanced";
-	private static final SessionAttributeStorage<Registration> regStorage = new SessionAttributeStorage<Registration>("registration");
-	private static final SessionAttributeStorage<ArrayList<UploadedFileWrapper>> regCertsStorage = new SessionAttributeStorage<ArrayList<UploadedFileWrapper>>("registrationCertificates");
-	private static final SessionAttributeStorage<UploadedFile> regCvStorage = new SessionAttributeStorage<UploadedFile>("registrationCv");
+	private static final SessionAttributeStorage<Registration> regStorage = new SessionAttributeStorage<>("registration");
+	private static final SessionAttributeStorage<ArrayList<UploadedFileWrapper>> regCertsStorage = new SessionAttributeStorage<>("registrationCertificates");
+	private static final SessionAttributeStorage<UploadedFile> regCvStorage = new SessionAttributeStorage<>("registrationCv");
 	private static final int MAX_CERTIFICATE_CNT = 3;
 	
 	// immutable definition of the form, can be freely shared/cached
 	private static final FormMapping<Registration> registrationForm =
 		Forms.automaticSecured(Registration.class, "registration")
 			.nested(Forms.automaticSecured(Address.class, "contactAddress", Forms.factoryMethod(Address.class, "getInstance")).build())
-			.build();
+			.build(FormConstants.DEFAULT_LOCATION);
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,7 +65,7 @@ public class AdvancedController extends AbstractBaseController {
 		} else {
 			// no submission, loading currently stored data to show it in the form
 			// log.info(registrationForm + "\n");
-			FormData<Registration> formData = new FormData<Registration>(findRegistration(request));
+			FormData<Registration> formData = new FormData<>(findRegistration(request));
 			renderForm(request, response, formData);
 		}
 	}
@@ -92,7 +92,7 @@ public class AdvancedController extends AbstractBaseController {
 
 	protected void processNewCollegue(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		// Only validations with beanvalidation group NewCollegue.New.class will be triggered
-		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request), NewCollegue.New.class);
+		FormData<Registration> newCollegueFormData = registrationForm.bind(reqParams, new ServletRequestContext(request), NewCollegue.New.class);
 		if (newCollegueFormData.isValid()) {
 			Registration reg = newCollegueFormData.getData();
 			updateWithRememberedFiles(request, reg);
@@ -106,14 +106,14 @@ public class AdvancedController extends AbstractBaseController {
 			updateWithRememberedFiles(request, reg);
 			rememberFilesTemporarily(request, reg);
 			
-			FormData<Registration> formData = new FormData<Registration>(reg, newCollegueFormData.getValidationResult()); // with validation errors
+			FormData<Registration> formData = new FormData<>(reg, newCollegueFormData.getValidationResult()); // with validation errors
 			renderForm(request, response, formData);
 		}
 	}
 
 	protected void processFormSubmission(HttpServletRequest request, HttpServletResponse response, RequestParams reqParams) throws IOException, ServletException {
 		try {
-			FormData<Registration> formData = registrationForm.bind(reqParams, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request)); 
+			FormData<Registration> formData = registrationForm.bind(reqParams, new ServletRequestContext(request)); 
 			if (formData.isValid()) {
 				saveRegistration(request, formData.getData());
 				redirect(request, response, PAGE_NAME, true);
@@ -133,7 +133,7 @@ public class AdvancedController extends AbstractBaseController {
 		FormData<Registration> formData) throws ServletException, IOException {
 		updateWithRememberedFiles(request, formData.getData());
 		log.info(registrationForm + "\n");
-		FormMapping<Registration> filledForm = registrationForm.fill(formData, FormConstants.DEFAULT_LOCALE, new ServletRequestContext(request));
+		FormMapping<Registration> filledForm = registrationForm.fill(formData, new ServletRequestContext(request));
 		log.info(filledForm + "\n");
 		
 		// Passing form to the template
@@ -169,7 +169,7 @@ public class AdvancedController extends AbstractBaseController {
 	}
 	
 	private void addNewCollegue(HttpServletRequest request, NewCollegue newCollegue, Registration registration) {
-		List<Collegue> newCollegues = new ArrayList<Collegue>(registration.getCollegues());
+		List<Collegue> newCollegues = new ArrayList<>(registration.getCollegues());
 		newCollegues.add(newCollegue.toCollegue());
 		registration.setCollegues(newCollegues);
 		registration.setNewCollegue(new NewCollegue());
@@ -179,7 +179,7 @@ public class AdvancedController extends AbstractBaseController {
 	private void removeCollegue(HttpServletRequest request, int index, Registration registration) {
 		updateWithRememberedFiles(request, registration);
 		if (registration.getCollegues() != null && index >= 0 && index < registration.getCollegues().size()) {
-			List<Collegue> newCollegues = new ArrayList<Collegue>(registration.getCollegues());
+			List<Collegue> newCollegues = new ArrayList<>(registration.getCollegues());
 			newCollegues.remove(index);
 			registration.setCollegues(newCollegues);
 		}
@@ -189,7 +189,7 @@ public class AdvancedController extends AbstractBaseController {
 	private void removeCertificate(HttpServletRequest request, int index, Registration registration) {
 		updateWithRememberedFiles(request, registration);
 		if (registration.getCertificates() != null && index >= 0 && index < registration.getCertificates().size()) {
-			List<UploadedFileWrapper> newCerts = new ArrayList<UploadedFileWrapper>(registration.getCertificates());
+			List<UploadedFileWrapper> newCerts = new ArrayList<>(registration.getCertificates());
 			newCerts.remove(index);
 			newCerts = appendEmptyCertsUpToMax(newCerts);
 			registration.setCertificates(newCerts);
@@ -219,13 +219,13 @@ public class AdvancedController extends AbstractBaseController {
 	}
 	
 	private Registration initRegistration() {
-		Set<AttendanceReason> attendanceReasons = new HashSet<AttendanceReason>();
+		Set<AttendanceReason> attendanceReasons = new HashSet<>();
 		attendanceReasons.add(AttendanceReason.COMPANY_INTEREST);
 		Registration aRegistration = new Registration(attendanceReasons);
 		aRegistration.setInterests(new int[] {Registration.ds.getInterestId(), Registration.webFrameworks.getInterestId()});
 		aRegistration.setContactAddress(Address.getInstance("Milady Horakove 22", "Praha", "16000"));
 		
-		List<Collegue> collegues = new ArrayList<Collegue>();
+		List<Collegue> collegues = new ArrayList<>();
 		Collegue michael = new Collegue();
 		michael.setName("Michael");
 		michael.setEmail("michael@email.com");
@@ -244,7 +244,7 @@ public class AdvancedController extends AbstractBaseController {
 	}
 
 	private List<UploadedFileWrapper> initCertificates() {
-		List<UploadedFileWrapper> certs = new ArrayList<UploadedFileWrapper>();
+		List<UploadedFileWrapper> certs = new ArrayList<>();
 		certs = appendEmptyCertsUpToMax(certs);
 		return certs;
 	}
@@ -288,7 +288,7 @@ public class AdvancedController extends AbstractBaseController {
 	}
 	
 	private List<UploadedFileWrapper> appendEmptyCertsUpToMax(List<UploadedFileWrapper> list) {
-		List<UploadedFileWrapper> res = new ArrayList<UploadedFileWrapper>();
+		List<UploadedFileWrapper> res = new ArrayList<>();
 		if (list != null) {
 			res.addAll(list);
 		}

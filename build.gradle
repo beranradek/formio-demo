@@ -22,6 +22,7 @@ targetCompatibility = 1.8
 
 // Bez takto urceneho repositare resolvovani interni ivy knihovnou gradlu nefunguje: 
 repositories {
+	mavenLocal()
     mavenCentral()
 }
 
@@ -29,7 +30,7 @@ dependencies {
 	def slf4jVersion = '1.7.12';
 	def logbackVersion = '1.1.3';
     def jettyVersion = '9.3.0.v20150612';
-    def formioVersion = '1.4.2';
+    def formioVersion = '1.5.1';
 
 	compile "com.google.guava:guava:18.0"
     compile "org.slf4j:slf4j-api:${slf4jVersion}"

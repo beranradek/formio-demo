@@ -95,7 +95,7 @@ public class Registration implements Serializable {
 	}
 
 	public static List<Interest> allInterests() {
-		List<Interest> list = new ArrayList<Interest>();
+		List<Interest> list = new ArrayList<>();
 		list.add(parallel);
 		list.add(webFrameworks);
 		list.add(ai);

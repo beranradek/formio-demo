@@ -16,7 +16,7 @@
  */
 package net.formio.demo.controller;
 
-import net.formio.AbstractRequestParams;
+import net.formio.RequestParams;
 import net.formio.ajax.AjaxResponse;
 import net.formio.ajax.error.AjaxErrorHandler;
 import net.formio.demo.domain.car.Car;
@@ -48,7 +48,7 @@ public class CarFormStateHandler extends SessionFormStateStorage<Car> implements
 	}
 	
 	@Override
-	public AjaxResponse<Car> errorResponse(AbstractRequestParams params, Throwable t) {
+	public AjaxResponse<Car> errorResponse(RequestParams params, Throwable t) {
 		log.error(t.getMessage(), t);
 		return nestedAjaxErrorHandler.errorResponse(params, t);
 	}

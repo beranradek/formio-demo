@@ -47,8 +47,8 @@ public class Car implements Serializable {
 		this.setModel(car.getModel());
 		this.setWithEngineDetails(car.isWithEngineDetails());
 		this.setEngine(car.getEngine());
-		this.setAccessoriesList(car.getAccessoriesList() != null ? new ArrayList<Accessories>(car.getAccessoriesList()) : new ArrayList<Accessories>());
-		this.setAttachments(car.getAttachments() != null ? new ArrayList<UploadedFileWrapper>(car.getAttachments()) : new ArrayList<UploadedFileWrapper>());
+		this.setAccessoriesList(car.getAccessoriesList() != null ? new ArrayList<>(car.getAccessoriesList()) : new ArrayList<>());
+		this.setAttachments(car.getAttachments() != null ? new ArrayList<>(car.getAttachments()) : new ArrayList<>());
 		this.setColor(car.getColor());
 	}
 

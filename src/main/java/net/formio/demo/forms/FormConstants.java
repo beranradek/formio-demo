@@ -16,7 +16,7 @@
  */
 package net.formio.demo.forms;
 
-import java.util.Locale;
+import net.formio.format.Location;
 
 /**
  * Constants for form handling.
@@ -24,6 +24,6 @@ import java.util.Locale;
  */
 public class FormConstants {
 	public static final String SUCCESS = "success";
-	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+	public static final Location DEFAULT_LOCATION = Location.ENGLISH;
 	public static final String ACTION_PREFIX = "action_";
 }

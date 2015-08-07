@@ -25,8 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.formio.FormMapping;
 import net.formio.demo.forms.FormConstants;
-import net.formio.render.BasicFormRenderer;
-import net.formio.render.RenderContext;
+import net.formio.render.FormRenderer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +88,7 @@ public abstract class AbstractBaseController extends HttpServlet {
 	 * Creates form markup renderer.
 	 * @return
 	 */
-	protected BasicFormRenderer createRenderer() {
-		return new BasicFormRenderer(new RenderContext(FormConstants.DEFAULT_LOCALE));
+	protected FormRenderer createRenderer() {
+		return new FormRenderer();
 	}
 }

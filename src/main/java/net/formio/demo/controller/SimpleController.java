@@ -28,20 +28,20 @@ import net.formio.servlet.common.SessionAttributeStorage;
 public class SimpleController extends AbstractBaseController {
 	private static final long serialVersionUID = -940571494115484909L;
 	private static final String PAGE_NAME = "simple";
-	private static final SessionAttributeStorage<Person> personStorage = new SessionAttributeStorage<Person>("person");
+	private static final SessionAttributeStorage<Person> personStorage = new SessionAttributeStorage<>("person");
 	
 	// immutable definition of the form, can be freely shared/cached
 	// private static final FormMapping<Person> personForm = Forms.automatic(Person.class, "person").build();		
 	private static final FormMapping<Person> personForm = Forms.basic(Person.class, "person")
 		// whitelist of formProperties to bind
 		.fields("personId", "firstName", "lastName", "salary", "phone", "male", "nation", "birthDate")
-		.build();	
+		.build(FormConstants.DEFAULT_LOCATION);
 
 	@Override
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType(ContentTypes.HTML);
 		if (request.getParameter("submitted") != null) {
-			FormData<Person> formData = personForm.bind(new ServletRequestParams(request), FormConstants.DEFAULT_LOCALE);
+			FormData<Person> formData = personForm.bind(new ServletRequestParams(request));
 			if (formData.isValid()) {
 				personStorage.storeData(request.getSession(), formData.getData());
 				redirect(request, response, PAGE_NAME, true);
@@ -51,14 +51,14 @@ public class SimpleController extends AbstractBaseController {
 			}
 		} else {
 			// loading currently stored data to show it in the form
-			FormData<Person> formData = new FormData<Person>(findOrCreatePerson(request));
+			FormData<Person> formData = new FormData<>(findOrCreatePerson(request));
 			renderForm(request, response, formData);
 		}
 	}
 
 	protected void renderForm(HttpServletRequest request, HttpServletResponse response, FormData<Person> formData) throws ServletException, IOException {
-		FormMapping<Person> filledForm = personForm.fill(formData, FormConstants.DEFAULT_LOCALE);
-		Map<Nation, String> nationItems = new LinkedHashMap<Nation, String>();
+		FormMapping<Person> filledForm = personForm.fill(formData);
+		Map<Nation, String> nationItems = new LinkedHashMap<>();
 		for (Nation nation : Nation.values()) {
 			nationItems.put(nation, nation.name()); 
 		}
