@@ -17,7 +17,9 @@ import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.plus.webapp.PlusConfiguration;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -103,7 +105,17 @@ public class HttpServer {
         
         context.setDisplayName("Formio demo");
         context.setWelcomeFiles(new String[] { "redirect.jsp" });
+        context.setErrorHandler(createErrorHandler());
         context.getSessionHandler().getSessionManager().setMaxInactiveInterval(30 * 60); // in seconds
+	}
+	
+	private static ErrorHandler createErrorHandler() {
+		ErrorPageErrorHandler err = new ErrorPageErrorHandler();
+		err.addErrorPage(404, "/WEB-INF/jsp/error_pages/missing.jsp");
+		err.addErrorPage(401, "/WEB-INF/jsp/error_pages/unauthorized.jsp");
+		err.addErrorPage(403, "/WEB-INF/jsp/error_pages/unauthorized.jsp");
+		err.addErrorPage(RuntimeException.class, "/WEB-INF/jsp/error_pages/error.jsp");
+		return err;
 	}
 
 	private static int getServerPort() {
