@@ -70,6 +70,5 @@ dependencies {
 }
 
 // Task stage for Heroku deployment
-task stage(dependsOn: ['clean', 'build'])
+task stage(dependsOn: ['clean', 'installDist'])
 
-build.mustRunAfter clean
