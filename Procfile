@@ -1,1 +1,1 @@
-web: ./build/install/formio-demo/bin/formio-demo
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar build/libs/*.jar
