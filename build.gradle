@@ -22,6 +22,14 @@ repositories {
     mavenCentral()
 }
 
+jar {  
+    manifest {  
+        attributes(  
+            'Main-Class': 'net.formio.demo.HttpServer'  
+        )  
+    }  
+}  
+
 dependencies {
 	def slf4jVersion = '1.7.12';
 	def logbackVersion = '1.1.3';
@@ -62,6 +70,6 @@ dependencies {
 }
 
 // Task stage for Heroku deployment
-task stage(dependsOn: ['build', 'clean'])
+task stage(dependsOn: ['clean', 'build'])
 
 build.mustRunAfter clean
