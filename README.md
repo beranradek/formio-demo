@@ -1,6 +1,6 @@
 # Formio Demo
 
-Demo of simple/advanced/AJAX Java form using [Formio library](http://www.formio.net "Formio library").
+Demo of simple/advanced/AJAX Java form using [Formio library](https://github.com/beranradek/formio "Formio library").
 
 ## Live
 
