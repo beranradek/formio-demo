@@ -13,8 +13,8 @@ mainClassName = "net.formio.demo.HttpServer"
 version = '1.4'
 group = 'net.formio.demo'
 
-sourceCompatibility = 21
-targetCompatibility = 21
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // Bez takto urceneho repositare resolvovani interni ivy knihovnou gradlu nefunguje: 
 repositories {
