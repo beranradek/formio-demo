@@ -23,7 +23,7 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/stylesheets/app.css">
     
     <!-- JQuery - Bootstrap's dependency -->
-    <script src="${pageContext.request.contextPath}/javascripts/jquery-1.7.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/javascripts/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/javascripts/jquery-ui.custom.min.js"></script>
     <script src="${pageContext.request.contextPath}/javascripts/jquery-ui-i18n.js"></script>
     <!-- Bootstrap core JS -->
