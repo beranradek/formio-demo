@@ -28,3 +28,7 @@ Running from Eclipse - in Debug Configurations set these parameters:
 * Environment: Add PORT parameter with some value (e.g. 8090) if you don't want to use the default 8080 port of embedded Jetty container. The PORT environment variable is recognized by main class HttpServer. 
 * Display in favorites menu: Debug, ... 
 * Run the debug configuration and navigate to http://localhost:<your port>/ in the browser to see the running application
+
+## License
+
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
